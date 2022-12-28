@@ -11,7 +11,7 @@
 <script setup>
 import Clock1 from '@/components/clocks/Clock1.vue'
 import { computed, ref } from 'vue'
-const showSidebar = ref(true)
+const showSidebar = ref(false)
 const showSidebarFactor = computed(() => {return showSidebar.value ? 1 : 0.2})
 function toggleSidebar() {
     showSidebar.value = !showSidebar.value
