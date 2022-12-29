@@ -1,7 +1,6 @@
 <template>
     
     <nav class="sidebar white-theme" :style="{ width: (200 * showSidebarFactor)+'px' }" @mouseenter="toggleSidebar" @mouseleave="toggleSidebar">
-        {{showSidebar}}{{(200 * showSidebarFactor)+'px'}}
         <transition name="fade">
             <div v-show="showSidebar" class="clock" :style="{ width: (200 * showSidebarFactor)+'px' }">
                 <Clock1 :showSidebarFactor="showSidebarFactor" />
@@ -12,12 +11,21 @@
 
 <script setup>
 import Clock1 from '@/components/clocks/Clock1.vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+
+const emit = defineEmits(['showSidebarEvent'])
+
 const showSidebar = ref(false)
 const showSidebarFactor = computed(() => {return showSidebar.value ? 1 : 0.2})
+
 function toggleSidebar() {
     showSidebar.value = !showSidebar.value
 }
+
+watch(showSidebar,(newShowSidebar) => {
+    console.log(`showSidebar is ${newShowSidebar}`);
+    emit('showSidebarEvent',showSidebarFactor)
+})
 </script>
 
 <style lang="scss">
@@ -37,19 +45,15 @@ function toggleSidebar() {
     background-color: rgb(0, 0, 0);
 }
 .clock{
-    position: fixed;
     overflow: hidden;
     transition: 0.2s;
     justify-content: center;
     align-items: center;
     svg circle{
-        fill: transparent;
-        stroke-width: 6;
-        //stroke: var(--clr);
-        stroke: #7f7f7f;
+        stroke-width: 4;
+        stroke: var(--clr);
         stroke-linecap: round;
-        stroke-dasharray: 440;
-        stroke-dashoffset: 440;
+        transform: translate(0px,15px);
     }
 }
 .fade-enter-from{
@@ -58,7 +62,8 @@ function toggleSidebar() {
 .fade-enter-to{
     opacity: 1;
 }
-.fade-enter-active{
+.fade-enter-active,
+.fade-leave-active{
     transition: all 0.2s ease ;
 }
 .fade-leave-from{
@@ -66,8 +71,5 @@ function toggleSidebar() {
 }
 .fade-leave-to{
     opacity: 0;
-}
-.fade-leave-active{
-    transition: all 0.2s ease ;
 }
 </style>
