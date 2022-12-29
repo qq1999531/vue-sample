@@ -3,37 +3,20 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav> -->
-  <router-view/>
+  <router-view />
 </template>
 
 <style lang="scss">
-*{
+* {
   padding: 0px;
   margin: 0px;
-}
-body {
-  //background-color: #242526;
-  margin: 0;
 }
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased; //字体抗锯齿
+  -moz-osx-font-smoothing: grayscale; //字体抗锯齿
   text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+  color: #000000;
 }
 </style>
