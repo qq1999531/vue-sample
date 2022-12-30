@@ -7,6 +7,8 @@
 </template>
 
 <style lang="scss">
+$material-symbols-font-path: "~material-symbols/";
+@import "material-symbols";
 * {
   padding: 0px;
   margin: 0px;

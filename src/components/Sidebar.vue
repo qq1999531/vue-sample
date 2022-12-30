@@ -2,17 +2,27 @@
   <nav
     class="sidebar white-theme"
     :style="{ width: 200 * showSidebarFactor + 'px' }"
-    @mouseenter="toggleSidebar"
-    @mouseleave="toggleSidebar"
   >
-    <transition name="fade">
-      <div v-show="showSidebar" class="clock">
-        <slot name="sidebarClock">
-          <Clock1 :showSidebarFactor="showSidebarFactor" />
-        </slot>
-      </div>
-    </transition>
-    <div v-show="showSidebar" class="menuHeader"></div>
+    <div style="height: 100%">
+      <transition name="fade">
+        <div v-show="showSidebar" class="clock">
+          <slot name="sidebarClock">
+            <Clock1 :showSidebarFactor="showSidebarFactor" />
+          </slot>
+        </div>
+      </transition>
+      <div v-show="showSidebar" class="menuHeader"></div>
+      <div style="height: 100%" class="menuFooter"></div>
+    </div>
+    <div class="bottomBtn" @click="toggleSidebar">
+      <div
+        class="icons"
+        :class="{
+          leftSpin: showSidebar,
+          rightSpin: !showSidebar,
+        }"
+      ></div>
+    </div>
   </nav>
 </template>
 
@@ -38,12 +48,16 @@ watch(showSidebar, (newShowSidebar) => {
 </script>
 
 <style lang="scss">
+@use "../scss/icons.scss";
 .sidebar {
   overflow: hidden;
   height: 100%;
   position: fixed;
   border-right: 1px solid rgb(127, 127, 127);
   transition: 0.2s;
+  display: flex;
+  flex: 1 1 auto;
+  flex-flow: column;
 }
 .white-theme {
   background-color: rgb(255, 255, 255);
@@ -82,5 +96,24 @@ watch(showSidebar, (newShowSidebar) => {
   opacity: 0.5;
   transition: 0.2s;
   background: #000000;
+}
+.menuFooter {
+  flex-flow: column;
+  display: flex;
+  flex: 0 1 auto;
+}
+.bottomBtn {
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  justify-content: center;
+  height: 50px;
+  align-items: center;
+}
+.rightSpin {
+  transform: rotate(90deg);
+}
+.leftSpin {
+  transform: rotate(-90deg);
 }
 </style>

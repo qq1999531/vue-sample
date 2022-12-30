@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="scss">
-.homeMain{
+.homeMain {
   transition: 0.2s;
 }
 </style>>
