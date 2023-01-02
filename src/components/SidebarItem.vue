@@ -102,15 +102,7 @@
             top: labelMiniYYofsset + 'px',
           }"
         >
-          <span v-if="!menuItemLabel" class="labelName">{{ item?.name }}</span>
-          <component
-            v-else
-            :labelName="item?.name"
-            :active="active"
-            :miniActive="miniActive"
-            :isChildrenMenuOpen="showChildren"
-            :is="menuItemLabel"
-          />
+          <span class="labelName">{{ item?.name }}</span>
         </div>
       </div>
       <div class="labelminiSub" v-if="depth == 0 && !MakeSpace"></div>
@@ -142,5 +134,5 @@
 </template>
 
 <script setup>
-    import SidebarItem from "@/components/SidebarItem.vue";
+import SidebarItem from "@/components/SidebarItem.vue";
 </script>

@@ -85,10 +85,6 @@
 import { onMounted, ref } from "@vue/runtime-core";
 import $ from "jquery";
 
-defineProps({
-  showSidebarFactor: Number,
-});
-
 const hour = ref(0);
 const minute = ref(0);
 const second = ref(0);
@@ -303,6 +299,7 @@ onMounted(() => {
   left: 61px;
   align-items: center;
   opacity: 0.5;
+  user-select: none;
 }
 .clockText {
   color: #ffffff;

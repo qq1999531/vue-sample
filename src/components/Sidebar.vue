@@ -1,18 +1,15 @@
 <template>
-  <nav
-    class="sidebar white-theme"
-    :style="{ width: 200 * showSidebarFactor + 'px' }"
-  >
+  <nav class="sidebar white-theme" :style="{ width: sidebarWidth + 'px' }">
     <div style="height: 100%">
       <transition name="fade">
         <div v-show="showSidebar" class="clock">
           <slot name="sidebarClock">
-            <Clock1 :showSidebarFactor="showSidebarFactor" />
+            <Clock1 />
           </slot>
         </div>
       </transition>
       <div v-show="showSidebar" class="menuHeader"></div>
-      <div style="height: 100%" class="menuFooter"></div>
+      <div class="menuFooter"></div>
     </div>
     <div class="bottomBtn" @click="toggleSidebar">
       <div
@@ -28,22 +25,19 @@
 
 <script setup>
 import Clock1 from "@/components/clocks/Clock1.vue";
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 const emit = defineEmits(["showSidebarEvent"]);
-
 const showSidebar = ref(true);
-const showSidebarFactor = computed(() => {
-  return showSidebar.value ? 1 : 0.2;
-});
+const sidebarWidth = ref(200);
 
 function toggleSidebar() {
   showSidebar.value = !showSidebar.value;
 }
 
 watch(showSidebar, (newShowSidebar) => {
-  console.log(`showSidebar is ${newShowSidebar}`);
-  emit("showSidebarEvent", showSidebarFactor);
+  sidebarWidth.value = newShowSidebar ? 200 : 40;
+  emit("showSidebarEvent", newShowSidebar);
 });
 </script>
 
@@ -53,14 +47,14 @@ watch(showSidebar, (newShowSidebar) => {
   overflow: hidden;
   height: 100%;
   position: fixed;
-  border-right: 1px solid rgb(127, 127, 127);
+  border-right: 1px solid rgb(0, 0, 0,0.5);
   transition: 0.2s;
   display: flex;
   flex: 1 1 auto;
   flex-flow: column;
 }
 .white-theme {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255);
 }
 .black-theme {
   background-color: rgb(0, 0, 0);
@@ -101,6 +95,7 @@ watch(showSidebar, (newShowSidebar) => {
   flex-flow: column;
   display: flex;
   flex: 0 1 auto;
+  height: 100%;
 }
 .bottomBtn {
   cursor: pointer;
