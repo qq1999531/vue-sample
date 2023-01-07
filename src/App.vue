@@ -3,16 +3,17 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav> -->
-  <Sidebar @showSidebarEvent="showSidebarEvent" />
+  <Sidebar @updateshowSidebar="updateshowSidebar" />
   <router-view />
+  {{ showSidebar }}
 </template>
 
 <script setup>
 import Sidebar from "@/components/Sidebar.vue";
 import $ from "jquery";
-function showSidebarEvent(showSidebar) {
-  console.log(showSidebar);
-  if (showSidebar) {
+
+function updateshowSidebar(ShowSidebar) {
+  if (ShowSidebar) {
     $(".sidebarCollapsed")
       .addClass("sidebarExpanded")
       .removeClass("sidebarCollapsed");
@@ -40,10 +41,10 @@ $material-symbols-font-path: "~material-symbols/";
   text-align: center;
   color: #000000;
 }
-.sidebarExpanded {
-  padding-left: 200px;
+.white-theme {
+  background-color: rgba(255, 255, 255);
 }
-.sidebarCollapsed {
-  padding-left: 40px;
+.black-theme {
+  background-color: rgb(0, 0, 0);
 }
 </style>

@@ -9,6 +9,11 @@
         </div>
       </transition>
       <div v-show="showSidebar" class="menuHeader"></div>
+      <div class="menuWraper">
+        <template v-for="(item, index) in props.sidebarItems" :key="index">
+          <SidebarItem :item="item" :depth="0" />
+        </template>
+      </div>
       <div class="menuFooter"></div>
     </div>
     <div class="bottomBtn" @click="toggleSidebar">
@@ -25,9 +30,12 @@
 
 <script setup>
 import Clock1 from "@/components/clocks/Clock1.vue";
-import { ref, watch } from "vue";
+import SidebarItem from "@/components/SidebarItem.vue";
+import { provide, ref, watch } from "vue";
 
-const emit = defineEmits(["showSidebarEvent"]);
+const props = defineProps(["sidebarItems"]);
+const emit = defineEmits(["updateshowSidebar"]);
+
 const showSidebar = ref(true);
 const sidebarWidth = ref(200);
 
@@ -37,8 +45,10 @@ function toggleSidebar() {
 
 watch(showSidebar, (newShowSidebar) => {
   sidebarWidth.value = newShowSidebar ? 200 : 40;
-  emit("showSidebarEvent", newShowSidebar);
+  emit("updateshowSidebar", newShowSidebar);
 });
+
+provide("showSidebar", showSidebar);
 </script>
 
 <style lang="scss">
@@ -47,17 +57,11 @@ watch(showSidebar, (newShowSidebar) => {
   overflow: hidden;
   height: 100%;
   position: fixed;
-  border-right: 1px solid rgb(0, 0, 0,0.5);
+  border-right: 1px solid rgb(0, 0, 0, 0.5);
   transition: 0.2s;
   display: flex;
   flex: 1 1 auto;
   flex-flow: column;
-}
-.white-theme {
-  background-color: rgba(255, 255, 255);
-}
-.black-theme {
-  background-color: rgb(0, 0, 0);
 }
 .clock {
   height: 140px;

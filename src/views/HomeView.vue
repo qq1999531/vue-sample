@@ -13,5 +13,11 @@
 <style lang="scss">
 .home {
   transition: 0.2s;
+  &.sidebarExpanded {
+    padding-left: 200px;
+  }
+  &.sidebarCollapsed {
+    padding-left: 40px;
+  }
 }
 </style>>
