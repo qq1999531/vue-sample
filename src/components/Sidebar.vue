@@ -37,10 +37,20 @@ const props = defineProps(["sidebarItems"]);
 const emit = defineEmits(["updateshowSidebar"]);
 
 const showSidebar = ref(true);
+const menuHover = ref(false);
 const sidebarWidth = ref(200);
+const totalId = ref(0);
+const currantItemHover = null;
 
 function toggleSidebar() {
   showSidebar.value = !showSidebar.value;
+}
+function updateCurrantItemHover(id) {
+  currantItemHover = id;
+}
+function updateId() {
+  totalId++;
+  return totalId;
 }
 
 watch(showSidebar, (newShowSidebar) => {
@@ -49,6 +59,10 @@ watch(showSidebar, (newShowSidebar) => {
 });
 
 provide("showSidebar", showSidebar);
+provide("currantItemHover", currantItemHover);
+provide("updateCurrantItemHover", updateCurrantItemHover);
+provide("updateId", updateId);
+provide("menuHover", menuHover);
 </script>
 
 <style lang="scss">

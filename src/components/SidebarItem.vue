@@ -1,29 +1,44 @@
 <template>
   <div ref="menuItem" class="menu-item-base alignCenter">
-    <!--<div v-if="active" class="BlockBack"></div> -->
+    <div v-if="active" class="BlockBack"></div>
     <!-- ======================== -->
     <!-- ======================== -->
     <!-- 1 this is the menu label -->
     <!-- ======================== -->
     <!-- ======================== -->
 
-    <div class="label TransBG">
+    <div
+      class="label TransBG"
+      @[shouldMouseEnterEvent]="hover = true"
+      @[shouldMouseLeaveEvent]="hover = false"
+      @click="labelClick"
+      :style="{
+        paddingLeft: `${props.depth * 18}px`,
+      }"
+      :class="{
+        TransitionC: showSidebar || (!showSidebar && !showChildren),
+        menuexpand: showChildren,
+        activeClass: active,
+        miniActiveClass: miniActive,
+        labelHoverClass: (props.depth != 0 && !showSidebar) || showSidebar,
+      }"
+    >
       <div
         class="left"
         ref="labelRef"
         :class="{
-          marginAuto: !showSidebar && depth == 0,
+          marginAuto: !showSidebar && props.depth == 0,
           collapseEnd: !showSidebar,
         }"
       >
         <i aria-hidden="true" class="material-symbols-outlined">{{
-          item.icon.text
+          props.item.icon.text
         }}</i>
         <span class="labelName">{{ labelName }}</span>
       </div>
-      <template v-if="(!showSidebar && depth != 0) || showSidebar">
+      <template v-if="(!showSidebar && props.depth != 0) || showSidebar">
         <div
-          v-if="item.children"
+          v-if="props.item.children"
           class="icons postIconOpenAnima"
           :class="{ opened: showChildren }"
         ></div>
@@ -35,19 +50,25 @@
     <!--2 this container is for when menu Children when full width -->
     <!-- ========================================================= -->
     <!-- ========================================================= -->
-    <div v-if="showSidebar || (depth != 0 && !showSidebar)">
+    <div v-if="showSidebar || (props.depth != 0 && !showSidebar)">
       <div
+        style="transition: 0.2s"
         class="items-container"
-        :style="{ maxHeight: heifOfContainer, transition: transitionTime }"
+        :style="{
+          maxHeight:
+            containerHeight == 'fit-content'
+              ? containerHeight
+              : containerHeight + 'px',
+        }"
         ref="container"
-        v-if="item.children"
+        v-if="props.item.children"
       >
         <template v-if="renderChildren">
           <SidebarItem
-            v-for="(item, index) in item.children"
+            v-for="(item, index) in props.item.children"
             :key="index"
             :item="item"
-            :depth="depth + 1"
+            :depth="props.depth + 1"
           />
         </template>
       </div>
@@ -60,42 +81,42 @@
     <!-- ========================================== -->
 
     <div
-      v-if="!showSidebar && depth == 0 && !collapsed"
-      :class="{ topContainer: depth == 0, vasopacitiy: !expanded }"
+      v-if="!showSidebar && props.depth == 0"
+      :class="{ topContainer: props.depth == 0, vasopacitiy: !expanded }"
       ref="topContainerRef"
       :style="{
-        [MakeSpace
+        [makeSpace
           ? 'bottom'
-          : 'top']: `calc(${ContainerOffsetYConputed} - 1px)`,
-        left: `calc(${widthMiniMenu} - 1px)`,
-        maxHeight: TopcontainerHiefht,
-        width: showChildren ? '250px' : '0px',
+          : 'top']: `calc(${containerOffsetYConputed} - 1px)`,
+        left: '39px',
+        maxHeight: topcontainerHeight,
+        width: showChildren ? '200px' : '0px',
         zIndex: showChildren ? '850' : '849',
-        animationDelay: seTAnimationTimeOut ? '0.3s' : '0',
+        animationDelay: seTAnimationTimeOut ? '0.2s' : '0',
       }"
     >
       <div
-        @click="miniLabelClick"
+        @click="clickCompose"
         @mousewheel="mousewheelop"
         class="labelMini"
         :class="{
-          [miniActiveClass]: miniActive,
-          [activeClass]: active,
+          miniActiveClass: miniActive,
+          activeClass: active,
         }"
         :style="{
           position: 'fixed',
           whiteSpace: 'nowrap',
-          left: menuType == 'fully' ? '0px' : miniLabelDirection,
+          left: '0px',
           width: miniLabelWidth,
-          [MakeSpace ? 'bottom' : 'top']: ContainerOffsetYConputed,
-          opacity: depth == 0 && showChildren ? '1' : '0',
+          [makeSpace ? 'bottom' : 'top']: containerOffsetYConputed,
+          opacity: props.depth == 0 && showChildren ? '1' : '0',
         }"
       >
         <!--main menu btn-->
         <div
           v-if="showChildren"
           class="left"
-          :class="{ marginAuto: !showSidebar && depth == 0 }"
+          :class="{ marginAuto: !showSidebar && props.depth == 0 }"
           :style="{
             left: widthMiniMenu,
             top: labelMiniYYofsset + 'px',
@@ -104,7 +125,7 @@
           <span class="labelName">{{ item?.name }}</span>
         </div>
       </div>
-      <div class="labelminiSub" v-if="depth == 0 && !MakeSpace"></div>
+      <div class="labelminiSub" v-if="props.depth == 0 && !makeSpace"></div>
       <div
         class="items-container"
         :style="{
@@ -119,37 +140,55 @@
             v-for="(item, index) in item.children"
             :key="index"
             :item="item"
-            :depth="depth + 1"
+            :depth="props.depth + 1"
             :setMaxHeightTopCProp="setMaxHeightTopC"
           />
         </template>
       </div>
-      <div class="labelminiSub" v-if="depth == 0 && MakeSpace"></div>
+      <div class="labelminiSub" v-if="props.depth == 0 && makeSpace"></div>
     </div>
   </div>
 </template>
 
 <script setup>
 import SidebarItem from "@/components/SidebarItem.vue";
-import { computed, nextTick, onActivated, ref } from "@vue/runtime-core";
+import {
+  computed,
+  inject,
+  nextTick,
+  onActivated,
+  ref,
+  watch,
+} from "@vue/runtime-core";
 import { useRouter } from "vue-router";
 
 const props = defineProps(["item", "depth", "setMaxHeightTopCProp"]);
 const router = useRouter();
 
 const showSidebar = inject("showSidebar");
-const MakeSpace = ref(false);
+const currantItemHover = inject("currantItemHover");
+const updateCurrantItemHover = inject("updateCurrantItemHover");
+const updateId = inject("updateId");
+const menuHover = inject("menuHover");
+const makeSpace = ref(false);
+const hover = ref(false);
 const active = ref(false);
 const miniActive = ref(false);
 const showChildren = ref(false);
 const expanded = ref(false);
 const renderChildren = ref(false);
-const cacheHeight = ref(null);
+const seTAnimationTimeOut = ref(false);
 const containerHeight = ref("0");
-const TopcontainerHeight = ref("fit-content");
+const containerOffsetY = ref(0);
+const labelMiniYYofsset = ref(0);
+const topcontainerHeight = ref("fit-content");
 const menuItem = ref();
 const topContainerRef = ref();
-const hieghtTimeout = null;
+const labelRef = ref();
+const container = ref();
+const cacheHeight = null;
+const id = null;
+const heightTimeout = null;
 const topConTime = null;
 const renderTimeOut = null;
 
@@ -159,64 +198,133 @@ const labelName = computed(() => {
   }
   return props.item?.name;
 });
+const shouldMouseEnterEvent = computed(() => {
+  return !showSidebar && props.depth == 0 ? "mouseenter" : null;
+});
+const shouldMouseLeaveEvent = computed(() => {
+  return !showSidebar && props.depth == 0 ? "mouseleave" : null;
+});
+const containerOffsetYConputed = computed(() => {
+  return `${containerOffsetY.value}px`;
+});
+const miniLabelWidth = computed(() => {
+  return expanded.value
+    ? `calc(${menuItem.clientWidth}px + 250px - 1.5px)`
+    : `40px`;
+});
 
+function mousewheelop(w) {
+  document.querySelector(".sidebar").scrollBy(0, w.deltaY);
+}
+function clickCompose() {
+  if (props.item?.href && router) router?.push(props.item?.href);
+}
+function toggleMenu() {
+  if (!props.item?.children) return;
+  clearTimeout(heightTimeout);
+  clearTimeout(renderTimeOut);
+  if (showChildren.value) {
+    closeItemChildren();
+  } else {
+    openItemCildren();
+  }
+}
+function labelClick() {
+  clickCompose();
+  if (!hover.value) {
+    toggleMenu();
+  }
+}
 function setMaxHeightTopC() {
   const x = topContainerRef?.getBoundingClientRect();
-  if (MakeSpace) {
-    TopcontainerHeight = x.height + "px";
+  if (makeSpace.value) {
+    topcontainerHeight.value = x.height + "px";
   } else {
-    TopcontainerHeight = x.height - (x.top + x.height) - 2 + "px";
+    topcontainerHeight.value = x.height - (x.top + x.height) - 2 + "px";
+  }
+}
+function setItemOffsetHeight() {
+  if (props.depth == 0) {
+    const x = menuItem.getBoundingClientRect();
+    containerOffsetY.value = x.top;
+    makeSpace.value = false;
   }
 }
 function setSmallMenuDataForToggle(val) {
   clearTimeout(topConTime);
-  clearTimeout(hieghtTimeout);
+  clearTimeout(heightTimeout);
   clearTimeout(renderTimeOut);
   nextTick(() => {
-    expanded = val;
+    expanded.value = val;
   });
-  showChildren = val;
+  showChildren.value = val;
 }
 function openItemCildren() {
   if (props.depth == 1 && !showSidebar) {
     props.setMaxHeightTopCProp();
   }
   if (!showSidebar && props.depth == 0) {
-    showChildren = true;
+    showChildren.value = true;
     nextTick(() => {
-      expanded = true;
+      expanded.value = true;
     });
   }
   if (!props.item?.children) return;
-  if (expanded) return;
+  if (expanded.value) return;
   setSmallMenuDataForToggle(true);
-  renderChildren = true;
+  renderChildren.value = true;
   if (cacheHeight) {
-    containerHeight = cacheHeight;
+    containerHeight.value = cacheHeight;
   } else {
-    containerHeight = props.item?.children.length * menuItem.offsetHeight + 3;
+    containerHeight.value =
+      props.item?.children.length * menuItem.offsetHeight + 3;
   }
   cacheHeight = null;
   if (!showSidebar && props.depth == 0) {
-    containerHeight = "fit-content";
+    containerHeight.value = "fit-content";
   }
   //add animation
-  hieghtTimeout = setTimeout(() => {
-    containerHeight = "fit-content";
+  heightTimeout = setTimeout(() => {
+    containerHeight.value = "fit-content";
+  }, 200);
+}
+function closeItemChildren() {
+  seTAnimationTimeOut.value = false;
+  if (!showSidebar && props.depth == 0) {
+    setSmallMenuDataForToggle(false);
+    topConTime = setTimeout(() => {
+      containerHeight.value = 0;
+      topConTime = null;
+    }, 200);
+    return;
+  }
+  setSmallMenuDataForToggle(false);
+  if (!props.item?.children) return;
+  if (!cacheHeight) {
+    cacheHeight = container?.offsetHeight;
+  }
+  containerHeight.value = container?.offsetHeight;
+  //this line must be pushed to top of call stack
+  setTimeout(() => {
+    containerHeight.value = 0;
+  }, 0);
+  renderTimeOut = setTimeout(() => {
+    renderChildren.value = false;
+    cacheHeight = null;
   }, 200);
 }
 function extractChildrenRoutes(obj, keyToFind) {
-    if (!obj) return
-    return Object.entries(obj).reduce(
-      (acc, [key, value]) =>
-        key == keyToFind
-          ? acc.concat(value)
-          : typeof value == 'object'
-          ? acc.concat(extractChildrenRoutes(value, keyToFind))
-          : acc,
-      []
-    )
-  }
+  if (!obj) return;
+  return Object.entries(obj).reduce(
+    (acc, [key, value]) =>
+      key == keyToFind
+        ? acc.concat(value)
+        : typeof value == "object"
+        ? acc.concat(extractChildrenRoutes(value, keyToFind))
+        : acc,
+    []
+  );
+}
 function isCurrentUrl(url) {
   let location = window.location;
   return (
@@ -236,29 +344,48 @@ function resloveHref(href) {
 }
 function checkActive() {
   if (props.item?.href && isCurrentUrl(resloveHref(props.item?.href))) {
-    active = true;
-    miniActive = false;
+    active.value = true;
+    miniActive.value = false;
   } else {
-    active = false;
+    active.value = false;
     if (!props.item?.children) return;
     let hasFound = false;
     let x = extractChildrenRoutes(props.item?.children, "href") || [];
     for (var i = 0; i < x.length; i++) {
       if (isCurrentUrl(resloveHref(x[i]))) {
         hasFound = true;
-        // clearTimeout(hieghtTimeout)
-        // clearTimeout(renderTimeOut)
-        miniActive = true;
-        if (menuMounted || !showSidebar) break;
-        if (ChildrenOpenActiveRoute) {
-          openItemCildren();
-        }
+        miniActive.value = true;
+        if (!showSidebar) break;
+        openItemCildren();
         break;
       }
     }
-    miniActive = hasFound;
+    miniActive.value = hasFound;
   }
 }
+
+watch(hover, (newHover) => {
+  if (!id) {
+    id = updateId();
+  }
+  if (newHover) {
+    seTAnimationTimeOut.value = true;
+    updateCurrantItemHover(id);
+    openItemCildren();
+    nextTick(() => {
+      setTimeout(() => {
+        setItemOffsetHeight();
+      }, 0);
+      const y = labelRef.getBoundingClientRect();
+      labelMiniYYofsset.value = y.top;
+    });
+  } else {
+    if (currantItemHover == id && menuHover) {
+    } else {
+      closeItemChildren();
+    }
+  }
+});
 
 onActivated(() => {
   checkActive();
