@@ -4,16 +4,19 @@
     <router-link to="/about">About</router-link>
   </nav> -->
   <Sidebar @updateshowSidebar="updateshowSidebar" :sidebarItems="defaultMenu" />
+  <Header/>
   <router-view />
 </template>
 
 <script setup>
 import Sidebar from "@/components/Sidebar.vue";
+import Header from "@/components/Header.vue"
 import $ from "jquery";
 
 const defaultMenu = [
   {
     name: "Settings",
+    href: "setting",
     icon: { text: "settings" },
   },
   {

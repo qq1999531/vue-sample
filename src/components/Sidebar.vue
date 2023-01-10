@@ -112,7 +112,6 @@ provide("menuScroll", menuScroll);
   border-right: 1px solid rgb(0, 0, 0, 0.5);
   transition: 0.2s;
   display: flex;
-  flex: 1 1 auto;
   flex-flow: column;
   z-index: 849;
 }
@@ -170,8 +169,6 @@ provide("menuScroll", menuScroll);
 }
 .menuWraper {
   height: 100%;
-  flex: 1 1 auto;
-  position: relative;
   display: flex;
   flex-flow: column;
   overflow-y: overlay;

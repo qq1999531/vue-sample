@@ -7,7 +7,7 @@
     }"
   >
     <!-- 1 this is the menu label -->
-
+    
     <div
       class="label"
       @[shouldMouseEnterEvent]="hover = true"
@@ -79,7 +79,7 @@
         [makeSpace
           ? 'bottom'
           : 'top']: `calc(${containerOffsetYConputed} - 1px)`,
-        left: '39px',
+        left: '40px',
         maxHeight: topcontainerHeight,
         width: showChildren ? '200px' : '0px',
         zIndex: showChildren ? '850' : '849',
@@ -92,6 +92,8 @@
         class="labelMini"
         :class="{
           activeClass: active,
+          showLabelMini: props.depth == 0 && showChildren,
+          unshowLabelMini: !(props.depth == 0 && showChildren),
         }"
         :style="{
           position: 'fixed',
@@ -206,7 +208,7 @@ const containerOffsetYConputed = computed(() => {
 });
 const miniLabelWidth = computed(() => {
   return expanded.value
-    ? `calc(${menuItem.value.clientWidth}px + 200px - 1.5px)`
+    ? `calc(${menuItem.value.clientWidth}px + 205px - 1.5px)`
     : `40px`;
 });
 
@@ -357,21 +359,19 @@ function checkActive() {
 }
 
 watch(hover, (newHover) => {
-  console.log(newHover);
   if (!id) {
     id = updateId();
   }
   if (newHover) {
     seTAnimationTimeOut.value = true;
     updateCurrentItemHover(id);
-    console.log(currentItemHover);
     openItemCildren();
     nextTick(() => {
       setTimeout(() => {
         setItemOffsetHeight();
       }, 0);
       const y = labelRef.value.getBoundingClientRect();
-      labelMiniYYofsset.value = y.top;
+      labelMiniYYofsset.value = y.top + 2;
     });
   } else {
     if (currentItemHover.value == id && menuHover) {
@@ -396,7 +396,7 @@ watch(currentItemHover, (newCurrentItemHover) => {
 watch(menuScroll, () => {
   setItemOffsetHeight();
   const y = labelRef.value.getBoundingClientRect();
-  labelMiniYYofsset.value = y.top;
+  labelMiniYYofsset.value = y.top + 2;
 });
 watch(showSidebar, () => {
   closeItemChildren();
@@ -442,16 +442,22 @@ onMounted(() => {
       position: fixed;
     }
   }
-  position: relative;
+  //position: relative;
   .labelMini {
-    transition: width 0.2s, opacity 0.2s;
-    background: none;
-    flex-direction: row;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    align-self: center;
+    transition: width 0.2s;
+    background-color: #ffffff;
+    //flex-direction: row;
+    //justify-content: center;
+    //display: flex;
+    //align-items: center;
+    //align-self: center;
     user-select: none;
+    &.showLabelMini{
+      transition: opacity 0s;
+    }
+    &.unshowLabelMini{
+      transition: opacity 1s;
+    }
     > .left {
       display: flex;
     }
@@ -460,11 +466,7 @@ onMounted(() => {
   }
   .label {
     transform-style: preserve-3d;
-    flex-direction: row;
-    justify-content: space-between;
-    white-space: nowrap;
     display: flex;
-    align-items: center;
     user-select: none;
     position: relative;
     box-sizing: border-box;
@@ -473,9 +475,6 @@ onMounted(() => {
     .left {
       display: flex;
       align-items: center;
-      &.marginAuto {
-        margin: auto;
-      }
       .labelName {
         padding-left: 10px;
       }
@@ -491,6 +490,8 @@ onMounted(() => {
     position: fixed;
     transition: width 0.2s ease;
     background: #ffffff;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
     border-top: 1px solid rgb(0, 0, 0, 0.5);
     border-bottom: 1px solid rgb(0, 0, 0, 0.5);
     border-right: 1px solid rgb(0, 0, 0, 0.5);
