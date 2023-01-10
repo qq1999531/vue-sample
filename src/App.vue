@@ -3,17 +3,27 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav> -->
-  <Sidebar @updateshowSidebar="updateshowSidebar" />
+  <Sidebar @updateshowSidebar="updateshowSidebar" :sidebarItems="defaultMenu" />
   <router-view />
-  {{ showSidebar }}
 </template>
 
 <script setup>
 import Sidebar from "@/components/Sidebar.vue";
 import $ from "jquery";
 
-function updateshowSidebar(ShowSidebar) {
-  if (ShowSidebar) {
+const defaultMenu = [
+  {
+    name: "Settings",
+    icon: { text: "settings" },
+  },
+  {
+    name: "Settings",
+    icon: { text: "settings" },
+  },
+];
+
+function updateshowSidebar(showSidebar) {
+  if (showSidebar) {
     $(".sidebarCollapsed")
       .addClass("sidebarExpanded")
       .removeClass("sidebarCollapsed");

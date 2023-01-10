@@ -1,0 +1,45 @@
+.white-theme {
+  .label {
+    background-color: #ffffff;
+    &.activeClass::before {
+      background-color: #000000;
+    }
+    &.activeClass {
+      background: #ffffff;
+      color: #000000;
+      .menu-icon {
+        color: #000000;
+      }
+      .icons {
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="#000000" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>')
+          50%/2rem 2rem;
+        -webkit-filter: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="#000000" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
+        filter: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="#000000" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
+      }
+    }
+    .menu-icon {
+      color: #000000;
+    }
+
+    &.miniActive {
+      background: $mini-active-item-bg-color-white;
+      .labelName {
+        color: $text-mini-active-color-white;
+      }
+      .menu-icon {
+        color: $icon-mini-active-color-white;
+      }
+    }
+    color: $text-color-none-hover-white;
+    &.labelHoverClass:hover {
+      background-color: $menu-item-hover-bg-white;
+      .labelName {
+        color: $text-hover-color-white;
+      }
+      .menu-icon {
+        color: $icon-hover-color-white;
+      }
+      //color: $text-active-color-white;
+    }
+  }
+}

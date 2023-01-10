@@ -1,5 +1,10 @@
 <template>
-  <nav class="sidebar white-theme" :style="{ width: sidebarWidth + 'px' }">
+  <nav
+    class="sidebar white-theme"
+    :style="{ width: sidebarWidth + 'px' }"
+    @[mouseEnterEvent]="onEnter"
+    @[mouseLeaveEvent]="onLeave"
+  >
     <div style="height: 100%">
       <transition name="fade">
         <div v-show="showSidebar" class="clock">
@@ -9,12 +14,18 @@
         </div>
       </transition>
       <div v-show="showSidebar" class="menuHeader"></div>
-      <div class="menuWraper">
+      <div
+        @[menuScrollEvent]="onMenuScroll"
+        class="menuWraper"
+        :class="{
+          miniCoolapseMenu: !showSidebar,
+        }"
+      >
         <template v-for="(item, index) in props.sidebarItems" :key="index">
           <SidebarItem :item="item" :depth="0" />
         </template>
+        <div class="menuFooter"></div>
       </div>
-      <div class="menuFooter"></div>
     </div>
     <div class="bottomBtn" @click="toggleSidebar">
       <div
@@ -31,38 +42,65 @@
 <script setup>
 import Clock1 from "@/components/clocks/Clock1.vue";
 import SidebarItem from "@/components/SidebarItem.vue";
-import { provide, ref, watch } from "vue";
+import { computed, provide, ref, watch } from "vue";
 
 const props = defineProps(["sidebarItems"]);
 const emit = defineEmits(["updateshowSidebar"]);
 
 const showSidebar = ref(true);
 const menuHover = ref(false);
+const menuScroll = ref(false);
 const sidebarWidth = ref(200);
 const totalId = ref(0);
-const currantItemHover = null;
+const currentItemHover = ref(null);
+
+const mouseEnterEvent = computed(() => {
+  return !showSidebar.value ? "mouseenter" : null;
+});
+const mouseLeaveEvent = computed(() => {
+  return !showSidebar.value ? "mouseleave" : null;
+});
+const menuScrollEvent = computed(() => {
+  return !showSidebar.value ? "scroll" : null;
+});
 
 function toggleSidebar() {
   showSidebar.value = !showSidebar.value;
 }
-function updateCurrantItemHover(id) {
-  currantItemHover = id;
+function updateCurrentItemHover(id) {
+  currentItemHover.value = id;
 }
 function updateId() {
-  totalId++;
-  return totalId;
+  totalId.value++;
+  return totalId.value;
+}
+function updateMenuHover(val) {
+  menuHover.value = val;
+}
+function onEnter() {
+  updateMenuHover(true);
+}
+function onLeave() {
+  updateMenuHover(false);
+}
+function onMenuScroll() {
+  menuScroll.value = !menuScroll.value;
 }
 
 watch(showSidebar, (newShowSidebar) => {
   sidebarWidth.value = newShowSidebar ? 200 : 40;
   emit("updateshowSidebar", newShowSidebar);
+  if (!newShowSidebar) {
+    updateMenuHover(true);
+  }
 });
 
 provide("showSidebar", showSidebar);
-provide("currantItemHover", currantItemHover);
-provide("updateCurrantItemHover", updateCurrantItemHover);
+provide("currentItemHover", currentItemHover);
+provide("updateCurrentItemHover", updateCurrentItemHover);
 provide("updateId", updateId);
 provide("menuHover", menuHover);
+provide("menuScroll", menuScroll);
 </script>
 
 <style lang="scss">
@@ -76,6 +114,7 @@ provide("menuHover", menuHover);
   display: flex;
   flex: 1 1 auto;
   flex-flow: column;
+  z-index: 849;
 }
 .clock {
   height: 140px;
@@ -128,5 +167,14 @@ provide("menuHover", menuHover);
 }
 .leftSpin {
   transform: rotate(-90deg);
+}
+.menuWraper {
+  height: 100%;
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  overflow-y: overlay;
+  overflow-x: hidden;
 }
 </style>

@@ -1,14 +1,15 @@
 <template>
-  <div ref="menuItem" class="menu-item-base alignCenter">
-    <div v-if="active" class="BlockBack"></div>
-    <!-- ======================== -->
-    <!-- ======================== -->
+  <div
+    ref="menuItem"
+    class="menu-item-base"
+    :class="{
+      MenuItemWidthOnMiniCollapse: !showSidebar && props.depth != 0,
+    }"
+  >
     <!-- 1 this is the menu label -->
-    <!-- ======================== -->
-    <!-- ======================== -->
 
     <div
-      class="label TransBG"
+      class="label"
       @[shouldMouseEnterEvent]="hover = true"
       @[shouldMouseLeaveEvent]="hover = false"
       @click="labelClick"
@@ -17,9 +18,7 @@
       }"
       :class="{
         TransitionC: showSidebar || (!showSidebar && !showChildren),
-        menuexpand: showChildren,
         activeClass: active,
-        miniActiveClass: miniActive,
         labelHoverClass: (props.depth != 0 && !showSidebar) || showSidebar,
       }"
     >
@@ -28,13 +27,12 @@
         ref="labelRef"
         :class="{
           marginAuto: !showSidebar && props.depth == 0,
-          collapseEnd: !showSidebar,
         }"
       >
         <i aria-hidden="true" class="material-symbols-outlined">{{
           props.item.icon.text
         }}</i>
-        <span class="labelName">{{ labelName }}</span>
+        <span v-if="labelName" class="labelName">{{ labelName }}</span>
       </div>
       <template v-if="(!showSidebar && props.depth != 0) || showSidebar">
         <div
@@ -45,11 +43,8 @@
       </template>
     </div>
 
-    <!-- ========================================================= -->
-    <!-- ========================================================= -->
     <!--2 this container is for when menu Children when full width -->
-    <!-- ========================================================= -->
-    <!-- ========================================================= -->
+
     <div v-if="showSidebar || (props.depth != 0 && !showSidebar)">
       <div
         style="transition: 0.2s"
@@ -67,18 +62,14 @@
           <SidebarItem
             v-for="(item, index) in props.item.children"
             :key="index"
-            :item="item"
+            :item="props.item"
             :depth="props.depth + 1"
           />
         </template>
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- ========================================== -->
     <!--3  this container is for mini Menu Children -->
-    <!-- ========================================== -->
-    <!-- ========================================== -->
 
     <div
       v-if="!showSidebar && props.depth == 0"
@@ -100,13 +91,13 @@
         @mousewheel="mousewheelop"
         class="labelMini"
         :class="{
-          miniActiveClass: miniActive,
           activeClass: active,
         }"
         :style="{
           position: 'fixed',
           whiteSpace: 'nowrap',
           left: '0px',
+          height: '40px',
           width: miniLabelWidth,
           [makeSpace ? 'bottom' : 'top']: containerOffsetYConputed,
           opacity: props.depth == 0 && showChildren ? '1' : '0',
@@ -118,34 +109,37 @@
           class="left"
           :class="{ marginAuto: !showSidebar && props.depth == 0 }"
           :style="{
-            left: widthMiniMenu,
+            left: '40px',
             top: labelMiniYYofsset + 'px',
           }"
         >
-          <span class="labelName">{{ item?.name }}</span>
+          <span class="labelName">{{ props.item?.name }}</span>
         </div>
       </div>
-      <div class="labelminiSub" v-if="props.depth == 0 && !makeSpace"></div>
+      <div style="height: 40px" v-if="depth == 0 && !makeSpace"></div>
       <div
         class="items-container"
         :style="{
-          maxHeight: heifOfContainer,
-          transition: transitionTime,
+          maxHeight:
+            containerHeight == 'fit-content'
+              ? containerHeight
+              : containerHeight + 'px',
+          transition: '0.2s',
         }"
         ref="container"
-        v-if="item.children"
+        v-if="props.item.children"
       >
         <template v-if="renderChildren">
           <SidebarItem
-            v-for="(item, index) in item.children"
+            v-for="(item, index) in props.item.children"
             :key="index"
-            :item="item"
+            :item="props.item"
             :depth="props.depth + 1"
             :setMaxHeightTopCProp="setMaxHeightTopC"
           />
         </template>
       </div>
-      <div class="labelminiSub" v-if="props.depth == 0 && makeSpace"></div>
+      <div style="height: 40px" v-if="depth == 0 && makeSpace"></div>
     </div>
   </div>
 </template>
@@ -157,6 +151,7 @@ import {
   inject,
   nextTick,
   onActivated,
+  onMounted,
   ref,
   watch,
 } from "@vue/runtime-core";
@@ -166,14 +161,14 @@ const props = defineProps(["item", "depth", "setMaxHeightTopCProp"]);
 const router = useRouter();
 
 const showSidebar = inject("showSidebar");
-const currantItemHover = inject("currantItemHover");
-const updateCurrantItemHover = inject("updateCurrantItemHover");
+const currentItemHover = inject("currentItemHover");
+const updateCurrentItemHover = inject("updateCurrentItemHover");
 const updateId = inject("updateId");
 const menuHover = inject("menuHover");
+const menuScroll = inject("menuScroll");
 const makeSpace = ref(false);
 const hover = ref(false);
 const active = ref(false);
-const miniActive = ref(false);
 const showChildren = ref(false);
 const expanded = ref(false);
 const renderChildren = ref(false);
@@ -182,34 +177,36 @@ const containerHeight = ref("0");
 const containerOffsetY = ref(0);
 const labelMiniYYofsset = ref(0);
 const topcontainerHeight = ref("fit-content");
+const currentRoute = ref(window.location);
 const menuItem = ref();
 const topContainerRef = ref();
 const labelRef = ref();
 const container = ref();
-const cacheHeight = null;
-const id = null;
-const heightTimeout = null;
-const topConTime = null;
-const renderTimeOut = null;
+let cacheHeight = null;
+let id = null;
+let heightTimeout = null;
+let topConTime = null;
+let renderTimeOut = null;
 
 const labelName = computed(() => {
-  if (!showSidebar) {
+  if (!showSidebar.value) {
     return props.depth != 0 ? props.item?.name : false;
+  } else {
+    return props.item?.name;
   }
-  return props.item?.name;
 });
 const shouldMouseEnterEvent = computed(() => {
-  return !showSidebar && props.depth == 0 ? "mouseenter" : null;
+  return !showSidebar.value && props.depth == 0 ? "mouseenter" : null;
 });
 const shouldMouseLeaveEvent = computed(() => {
-  return !showSidebar && props.depth == 0 ? "mouseleave" : null;
+  return !showSidebar.value && props.depth == 0 ? "mouseleave" : null;
 });
 const containerOffsetYConputed = computed(() => {
   return `${containerOffsetY.value}px`;
 });
 const miniLabelWidth = computed(() => {
   return expanded.value
-    ? `calc(${menuItem.clientWidth}px + 250px - 1.5px)`
+    ? `calc(${menuItem.value.clientWidth}px + 200px - 1.5px)`
     : `40px`;
 });
 
@@ -236,7 +233,7 @@ function labelClick() {
   }
 }
 function setMaxHeightTopC() {
-  const x = topContainerRef?.getBoundingClientRect();
+  const x = topContainerRef?.value.getBoundingClientRect();
   if (makeSpace.value) {
     topcontainerHeight.value = x.height + "px";
   } else {
@@ -245,7 +242,7 @@ function setMaxHeightTopC() {
 }
 function setItemOffsetHeight() {
   if (props.depth == 0) {
-    const x = menuItem.getBoundingClientRect();
+    const x = menuItem.value.getBoundingClientRect();
     containerOffsetY.value = x.top;
     makeSpace.value = false;
   }
@@ -260,10 +257,10 @@ function setSmallMenuDataForToggle(val) {
   showChildren.value = val;
 }
 function openItemCildren() {
-  if (props.depth == 1 && !showSidebar) {
+  if (props.depth == 1 && !showSidebar.value) {
     props.setMaxHeightTopCProp();
   }
-  if (!showSidebar && props.depth == 0) {
+  if (!showSidebar.value && props.depth == 0) {
     showChildren.value = true;
     nextTick(() => {
       expanded.value = true;
@@ -277,10 +274,10 @@ function openItemCildren() {
     containerHeight.value = cacheHeight;
   } else {
     containerHeight.value =
-      props.item?.children.length * menuItem.offsetHeight + 3;
+      props.item?.children.length * menuItem.value.offsetHeight + 3;
   }
   cacheHeight = null;
-  if (!showSidebar && props.depth == 0) {
+  if (!showSidebar.value && props.depth == 0) {
     containerHeight.value = "fit-content";
   }
   //add animation
@@ -290,7 +287,7 @@ function openItemCildren() {
 }
 function closeItemChildren() {
   seTAnimationTimeOut.value = false;
-  if (!showSidebar && props.depth == 0) {
+  if (!showSidebar.value && props.depth == 0) {
     setSmallMenuDataForToggle(false);
     topConTime = setTimeout(() => {
       containerHeight.value = 0;
@@ -301,9 +298,9 @@ function closeItemChildren() {
   setSmallMenuDataForToggle(false);
   if (!props.item?.children) return;
   if (!cacheHeight) {
-    cacheHeight = container?.offsetHeight;
+    cacheHeight = container.value?.offsetHeight;
   }
-  containerHeight.value = container?.offsetHeight;
+  containerHeight.value = container.value?.offsetHeight;
   //this line must be pushed to top of call stack
   setTimeout(() => {
     containerHeight.value = 0;
@@ -345,49 +342,207 @@ function resloveHref(href) {
 function checkActive() {
   if (props.item?.href && isCurrentUrl(resloveHref(props.item?.href))) {
     active.value = true;
-    miniActive.value = false;
   } else {
     active.value = false;
     if (!props.item?.children) return;
-    let hasFound = false;
     let x = extractChildrenRoutes(props.item?.children, "href") || [];
     for (var i = 0; i < x.length; i++) {
       if (isCurrentUrl(resloveHref(x[i]))) {
-        hasFound = true;
-        miniActive.value = true;
-        if (!showSidebar) break;
+        if (!showSidebar.value) break;
         openItemCildren();
         break;
       }
     }
-    miniActive.value = hasFound;
   }
 }
 
 watch(hover, (newHover) => {
+  console.log(newHover);
   if (!id) {
     id = updateId();
   }
   if (newHover) {
     seTAnimationTimeOut.value = true;
-    updateCurrantItemHover(id);
+    updateCurrentItemHover(id);
+    console.log(currentItemHover);
     openItemCildren();
     nextTick(() => {
       setTimeout(() => {
         setItemOffsetHeight();
       }, 0);
-      const y = labelRef.getBoundingClientRect();
+      const y = labelRef.value.getBoundingClientRect();
       labelMiniYYofsset.value = y.top;
     });
   } else {
-    if (currantItemHover == id && menuHover) {
+    if (currentItemHover.value == id && menuHover) {
     } else {
       closeItemChildren();
     }
   }
 });
+watch(currentRoute, () => {
+  checkActive();
+});
+watch(menuHover, (newMenuHover) => {
+  if (!newMenuHover) {
+    closeItemChildren();
+  }
+});
+watch(currentItemHover, (newCurrentItemHover) => {
+  if (newCurrentItemHover != id) {
+    closeItemChildren();
+  }
+});
+watch(menuScroll, () => {
+  setItemOffsetHeight();
+  const y = labelRef.value.getBoundingClientRect();
+  labelMiniYYofsset.value = y.top;
+});
+watch(showSidebar, () => {
+  closeItemChildren();
+  nextTick(() => {
+    setItemOffsetHeight();
+  });
+});
 
 onActivated(() => {
   checkActive();
 });
+onMounted(() => {
+  setItemOffsetHeight();
+});
 </script>
+<style lang="scss">
+%hoverPointer {
+  @media (hover: hover) and (pointer: fine) {
+    cursor: pointer;
+  }
+  @media (hover: none) and (pointer: coarse) {
+    cursor: none;
+  }
+}
+.menu-item-base {
+  align-self: center;
+  width: 90%;
+  .menu-icon,
+  .labelName {
+    transition: color 0.2s ease;
+  }
+  .label .left {
+    &.marginAuto {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  .labelMini .left {
+    align-items: center;
+    &.marginAuto {
+      position: fixed;
+    }
+  }
+  position: relative;
+  .labelMini {
+    transition: width 0.2s, opacity 0.2s;
+    background: none;
+    flex-direction: row;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    user-select: none;
+    > .left {
+      display: flex;
+    }
+    z-index: 851;
+    @extend %hoverPointer;
+  }
+  .label {
+    transform-style: preserve-3d;
+    flex-direction: row;
+    justify-content: space-between;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    position: relative;
+    box-sizing: border-box;
+    height: 40px;
+    z-index: 853;
+    .left {
+      display: flex;
+      align-items: center;
+      &.marginAuto {
+        margin: auto;
+      }
+      .labelName {
+        padding-left: 10px;
+      }
+    }
+
+    @extend %hoverPointer;
+  }
+  .hoverClass {
+    @extend %hoverPointer;
+  }
+  .topContainer {
+    overflow-y: overlay;
+    position: fixed;
+    transition: width 0.2s ease;
+    background: #ffffff;
+    border-top: 1px solid rgb(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgb(0, 0, 0, 0.5);
+    border-right: 1px solid rgb(0, 0, 0, 0.5);
+  }
+  .vasopacitiy {
+    animation: myOpac 0s;
+    animation-fill-mode: forwards;
+  }
+  @keyframes myOpac {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  &.MenuItemWidthOnMiniCollapse {
+    margin-left: auto;
+  }
+  .icons {
+    content: "";
+    height: 1.25rem;
+    min-width: 1.25rem;
+    width: 1.25rem;
+    margin-left: auto;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+  .icons.opened {
+    padding: auto;
+    -webkit-transform: rotate(180deg) !important;
+    transform: rotate(180deg) !important;
+  }
+}
+.items-container {
+  .sidebar & {
+    height: fit-content;
+    overflow: hidden;
+  }
+}
+.TransitionC {
+  .sidebar & {
+    transition: background-color 0.2s;
+  }
+}
+.postIconOpenAnima {
+  .sidebar & {
+    transition: -webkit-transform 200ms linear;
+    transition: transform 200ms linear;
+    transition: transform 200ms linear, -webkit-transform 200ms linear;
+    height: 100%;
+  }
+}
+</style>
