@@ -3,6 +3,7 @@
 </template>
 <style lang="scss">
 .header {
+  height: 50px;
   z-index: 700;
   transition: 0.2s;
   &.sidebarExpanded {

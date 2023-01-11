@@ -1,10 +1,11 @@
 <template>
-  <div
-    class="switchContainer"
-    :class="{ switchOn: props.bindValue, switchOff: !props.bindValue }"
-  >
+  <div class="switchContainer">
     <input type="checkbox" class="switchInput" />
-    <span class="switchMain" @click="props.bindValueUpdate(!bindValue)">
+    <span
+      class="switchMain"
+      @click="props.bindValueUpdate(!bindValue)"
+      :class="{ checked: props.bindValue, [props.specialTheme]: true }"
+    >
       <div
         class="switchContent"
         :style="{
@@ -12,10 +13,10 @@
           [props.bindValue ? 'paddingLeft' : 'paddingRight']: '2px',
         }"
       >
-        <span class="switchText"
-          ><span class="material-symbols-outlined">{{ showText.icon }}</span
-          >{{ showText.text }}</span
-        >
+        <span class="material-symbols-outlined switchIcon">{{
+          showText.icon
+        }}</span>
+        <span class="switchText">{{ showText.text }}</span>
       </div>
       <div
         class="switchButton"
@@ -28,7 +29,12 @@
 <script setup>
 const { computed } = require("@vue/runtime-core");
 
-const props = defineProps(["bindValue", "bindValueUpdate", "switchText"]); //switchText 结构   onText,offText,onIcon,offIcon
+const props = defineProps([
+  "bindValue",
+  "bindValueUpdate",
+  "switchText",
+  "specialTheme",
+]); //switchText 结构   onText,offText,onIcon,offIcon
 const showText = computed(() => {
   let sText = props.switchText.offText;
   let sIcon = props.switchText.offIcon;
@@ -43,9 +49,6 @@ const showText = computed(() => {
 <style lang="scss">
 .switchContainer {
   display: inline-flex;
-  font-size: 14px;
-  line-height: 20px;
-  vertical-align: middle;
   height: 30px;
   position: relative;
   align-items: center;
@@ -83,14 +86,32 @@ const showText = computed(() => {
     cursor: pointer;
     transition: border-color 0.2s, background-color 0.2s;
     .white-theme & {
-      border: 1px solid #000000;
-      background: #000000;
+      border: 1px solid #ff8080;
+      background: #ff8080;
+      color: #ffffff;
+      &.BAndWSwitch {
+        border: 1px solid #000000;
+        background: #000000;
+      }
+    }
+    .white-theme &.checked {
+      border: 1px solid #8080ff;
+      background: #8080ff;
       color: #ffffff;
     }
     .black-theme & {
-      border: 1px solid #ffffff;
-      background: #ffffff;
+      border: 1px solid #800000;
+      background: #800000;
       color: #000000;
+    }
+    .black-theme &.checked {
+      border: 1px solid #000080;
+      background: #000080;
+      color: #000000;
+      &.BAndWSwitch {
+        border: 1px solid #ffffff;
+        background: #ffffff;
+      }
     }
   }
   .switchContent {
@@ -108,10 +129,10 @@ const showText = computed(() => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    vertical-align: baseline;
-    & .material-symbols-outlined {
-      vertical-align: middle;
-    }
   }
+}
+.switchIcon {
+  vertical-align: middle;
+  user-select: none;
 }
 </style>
