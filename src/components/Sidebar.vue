@@ -109,11 +109,16 @@ provide("menuScroll", menuScroll);
   overflow: hidden;
   height: 100%;
   position: fixed;
-  border-right: 1px solid rgb(0, 0, 0, 0.5);
   transition: 0.2s;
   display: flex;
   flex-flow: column;
   z-index: 849;
+  &.white-theme {
+    border-right: 1px solid rgb(0, 0, 0, 0.5);
+  }
+  &.black-theme {
+    border-right: 1px solid rgb(255, 255, 255, 0.5);
+  }
 }
 .clock {
   height: 140px;
@@ -121,9 +126,11 @@ provide("menuScroll", menuScroll);
 }
 .fade-enter-from {
   opacity: 0;
+  height: 0px;
 }
 .fade-enter-to {
   opacity: 1;
+  height: 140px;
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -131,9 +138,11 @@ provide("menuScroll", menuScroll);
 }
 .fade-leave-from {
   opacity: 1;
+  height: 140px;
 }
 .fade-leave-to {
   opacity: 0;
+  height: 0px;
 }
 .menuHeader {
   margin-inline-start: auto;
@@ -142,10 +151,16 @@ provide("menuScroll", menuScroll);
   border-width: 2px;
   border-radius: 10px;
   width: 80%;
-  border-color: #000000;
   opacity: 0.5;
   transition: 0.2s;
-  background: #000000;
+  .white-theme & {
+    border-color: #000000;
+    background: #000000;
+  }
+  .black-theme & {
+    border-color: #ffffff;
+    background: #ffffff;
+  }
 }
 .menuFooter {
   flex-flow: column;

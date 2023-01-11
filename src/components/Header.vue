@@ -1,5 +1,5 @@
 <template>
-  <header class="header sidebarExpanded">this is header!</header>
+  <header class="header sidebarExpanded white-theme">this is header!</header>
 </template>
 <style lang="scss">
 .header {

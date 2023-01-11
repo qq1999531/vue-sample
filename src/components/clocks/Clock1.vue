@@ -302,14 +302,24 @@ onMounted(() => {
   user-select: none;
 }
 .clockText {
-  color: #ffffff;
   font-size: 1px;
+  .white-theme & {
+    color: #ffffff;
+  }
+  .black-theme & {
+    color: #000000;
+  }
 }
 .hourText,
 .minuteText {
   &:after {
     content: " ";
-    color: #000000;
+    .white-theme & {
+      color: #000000;
+    }
+    .black-theme & {
+      color: #ffffff;
+    }
   }
 }
 .digitText {
@@ -324,9 +334,15 @@ onMounted(() => {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #000000;
-  border: 2px solid #000000;
   border-radius: 15px;
+  .white-theme & {
+    background-color: #000000;
+    border: 2px solid #000000;
+  }
+  .black-theme & {
+    background-color: #ffffff;
+    border: 2px solid #ffffff;
+  }
 }
 .showingText {
   transform: perspective(100vh) rotateX(0) translateY(0%);
@@ -344,12 +360,22 @@ onMounted(() => {
 }
 .clockArc {
   fill: none;
-  stroke: #000000;
   transform: translate(0px, 15px);
+  .white-theme & {
+    stroke: #000000;
+  }
+  .black-theme & {
+    stroke: #ffffff;
+  }
 }
 .clockDot {
-  fill: lighten(#ffffff, 50%);
   opacity: 0.5;
   transform: translate(0px, 15px);
+  .white-theme & {
+    fill: lighten(#ffffff, 50%);
+  }
+  .black-theme & {
+    fill: lighten(#000000, 50%);
+  }
 }
 </style>

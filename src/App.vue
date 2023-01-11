@@ -4,14 +4,18 @@
     <router-link to="/about">About</router-link>
   </nav> -->
   <Sidebar @updateshowSidebar="updateshowSidebar" :sidebarItems="defaultMenu" />
-  <Header/>
+  <Header />
   <router-view />
 </template>
 
 <script setup>
 import Sidebar from "@/components/Sidebar.vue";
-import Header from "@/components/Header.vue"
+import Header from "@/components/Header.vue";
 import $ from "jquery";
+import { useStore } from "vuex";
+import { computed, watch } from "@vue/runtime-core";
+
+const appStore = useStore();
 
 const defaultMenu = [
   {
@@ -19,11 +23,11 @@ const defaultMenu = [
     href: "setting",
     icon: { text: "settings" },
   },
-  {
-    name: "Settings",
-    icon: { text: "settings" },
-  },
 ];
+
+const appTheme = computed(() => {
+  return appStore.state.appTheme;
+});
 
 function updateshowSidebar(showSidebar) {
   if (showSidebar) {
@@ -36,6 +40,14 @@ function updateshowSidebar(showSidebar) {
       .removeClass("sidebarExpanded");
   }
 }
+
+watch(appTheme, (newAppTheme, oldAppTheme) => {
+  console.log(oldAppTheme);
+  console.log(newAppTheme);
+  $("." + oldAppTheme)
+    .addClass(newAppTheme)
+    .removeClass(oldAppTheme);
+});
 </script>
 
 
@@ -52,12 +64,14 @@ $material-symbols-font-path: "~material-symbols/";
   -webkit-font-smoothing: antialiased; //字体抗锯齿
   -moz-osx-font-smoothing: grayscale; //字体抗锯齿
   text-align: center;
-  color: #000000;
+  height: 100%;
 }
 .white-theme {
-  background-color: rgba(255, 255, 255);
+  background-color: rgb(255, 255, 255);
+  color: #000000;
 }
 .black-theme {
   background-color: rgb(0, 0, 0);
+  color: #ffffff;
 }
 </style>

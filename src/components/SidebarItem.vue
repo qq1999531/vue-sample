@@ -7,7 +7,7 @@
     }"
   >
     <!-- 1 this is the menu label -->
-    
+
     <div
       class="label"
       @[shouldMouseEnterEvent]="hover = true"
@@ -32,7 +32,7 @@
         <i aria-hidden="true" class="material-symbols-outlined">{{
           props.item.icon.text
         }}</i>
-        <span v-if="labelName" class="labelName">{{ labelName }}</span>
+        <span v-show="labelName" class="labelName">{{ labelName }}</span>
       </div>
       <template v-if="(!showSidebar && props.depth != 0) || showSidebar">
         <div
@@ -445,17 +445,22 @@ onMounted(() => {
   //position: relative;
   .labelMini {
     transition: width 0.2s;
-    background-color: #ffffff;
     //flex-direction: row;
     //justify-content: center;
     //display: flex;
     //align-items: center;
     //align-self: center;
     user-select: none;
-    &.showLabelMini{
+    .white-theme & {
+      background-color: #ffffff;
+    }
+    .black-theme & {
+      background-color: #000000;
+    }
+    &.showLabelMini {
       transition: opacity 0s;
     }
-    &.unshowLabelMini{
+    &.unshowLabelMini {
       transition: opacity 1s;
     }
     > .left {
@@ -489,12 +494,20 @@ onMounted(() => {
     overflow-y: overlay;
     position: fixed;
     transition: width 0.2s ease;
-    background: #ffffff;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
-    border-top: 1px solid rgb(0, 0, 0, 0.5);
-    border-bottom: 1px solid rgb(0, 0, 0, 0.5);
-    border-right: 1px solid rgb(0, 0, 0, 0.5);
+    .white-theme & {
+      background: #ffffff;
+      border-top: 1px solid rgb(0, 0, 0, 0.5);
+      border-bottom: 1px solid rgb(0, 0, 0, 0.5);
+      border-right: 1px solid rgb(0, 0, 0, 0.5);
+    }
+    .black-theme & {
+      background: #000000;
+      border-top: 1px solid rgb(255, 255, 255, 0.5);
+      border-bottom: 1px solid rgb(255, 255, 255, 0.5);
+      border-right: 1px solid rgb(255, 255, 255, 0.5);
+    }
   }
   .vasopacitiy {
     animation: myOpac 0s;
