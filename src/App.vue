@@ -5,7 +5,9 @@
   </nav> -->
   <Sidebar @updateshowSidebar="updateshowSidebar" :sidebarItems="defaultMenu" />
   <Header />
-  <router-view />
+  <div class="router-viewContainer sidebarExpanded white-theme">
+    <router-view />
+  </div>
 </template>
 
 <script setup>
@@ -42,14 +44,11 @@ function updateshowSidebar(showSidebar) {
 }
 
 watch(appTheme, (newAppTheme, oldAppTheme) => {
-  console.log(oldAppTheme);
-  console.log(newAppTheme);
   $("." + oldAppTheme)
     .addClass(newAppTheme)
     .removeClass(oldAppTheme);
 });
 </script>
-
 
 <style lang="scss">
 $material-symbols-font-path: "~material-symbols/";
@@ -73,5 +72,16 @@ $material-symbols-font-path: "~material-symbols/";
 .black-theme {
   background-color: rgb(0, 0, 0);
   color: #ffffff;
+}
+.router-viewContainer {
+  overflow-y: auto;
+  transition: 0.2s;
+  height: calc(100vh - 51px);
+  &.sidebarExpanded {
+    padding-left: 200px;
+  }
+  &.sidebarCollapsed {
+    padding-left: 40px;
+  }
 }
 </style>

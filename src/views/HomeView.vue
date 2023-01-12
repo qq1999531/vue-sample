@@ -1,5 +1,5 @@
 <template>
-  <div class="home sidebarExpanded">
+  <div class="home">
     <!--<img alt="Vue logo" src="../assets/logo.png">-->
     <!--<HelloWorld msg="Welcome to Your Vue.js App"/>-->
     <div>home</div>
@@ -13,11 +13,5 @@
 <style lang="scss">
 .home {
   transition: 0.2s;
-  &.sidebarExpanded {
-    padding-left: 200px;
-  }
-  &.sidebarCollapsed {
-    padding-left: 40px;
-  }
 }
 </style>>

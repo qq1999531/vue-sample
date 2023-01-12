@@ -1,5 +1,5 @@
 <template>
-  <div class="settingView sidebarExpanded white-theme">
+  <div class="settingView">
     <div class="settingsContainer">
       <div class="settingContainer">
         <div class="settingDesc">明暗模式</div>
@@ -11,15 +11,6 @@
             :specialTheme="'BAndWSwitch'"
           />
         </div>
-      </div>
-      <div class="settingContainer">
-        <div class="settingDesc">test1</div>
-      </div>
-      <div class="settingContainer">
-        <div class="settingDesc">test1</div>
-      </div>
-      <div class="settingContainer">
-        <div class="settingDesc">test1</div>
       </div>
       <div class="settingContainer">
         <div class="settingDesc">test1</div>
@@ -61,16 +52,11 @@ function updateTheme(BAndWTheme) {
 <style lang="scss">
 .settingView {
   transition: 0.2s;
-  height: 100%;
   align-items: center;
   display: flex;
   flex-flow: column;
-  &.sidebarExpanded {
-    padding-left: 200px;
-  }
-  &.sidebarCollapsed {
-    padding-left: 40px;
-  }
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 .settingsContainer {
   display: flex;
