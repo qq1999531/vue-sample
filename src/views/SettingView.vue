@@ -14,6 +14,9 @@
       </div>
       <div class="settingContainer">
         <div class="settingDesc">时钟样式</div>
+        <div style="padding-right: 12px">
+          <Select1 />
+        </div>
       </div>
       <div class="settingContainer">
         <div class="settingDesc">test1</div>
@@ -24,6 +27,7 @@
 
 <script setup>
 import Switch1 from "@/components/switches/Switch1.vue";
+import Select1 from "@/components/select/Select1.vue";
 import { computed } from "@vue/runtime-core";
 import { useStore } from "vuex";
 

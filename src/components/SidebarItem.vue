@@ -208,7 +208,7 @@ const containerOffsetYConputed = computed(() => {
 });
 const miniLabelWidth = computed(() => {
   return expanded.value
-    ? `calc(${menuItem.value.clientWidth}px + 205px - 1.5px)`
+    ? `calc(${menuItem.value.clientWidth}px + 205px - 6px)`
     : `40px`;
 });
 
@@ -494,8 +494,8 @@ onMounted(() => {
     overflow-y: overlay;
     position: fixed;
     transition: width 0.2s ease;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
     .white-theme & {
       background: #ffffff;
       border-top: 1px solid rgb(0, 0, 0, 0.5);

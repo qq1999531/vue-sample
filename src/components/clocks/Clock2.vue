@@ -112,7 +112,7 @@ onMounted(() => {
   .black-theme & {
     color: #000000;
   }
-  .outer:active & {
+  .outer:hover & {
     width: 70px;
     height: 70px;
   }
@@ -165,18 +165,18 @@ onMounted(() => {
 }
 /*-----*/
 
-.outer:active .inner {
+.outer:hover .inner {
   -webkit-transform: rotate(0) translate(0) scale(0.9);
   -moz-transform: rotate(0) translate(0) scale(0.9);
   -ms-transform: rotate(0) translate(0) scale(0.9);
   -o-transform: rotate(0) translate(0) scale(0.9);
   transform: rotate(0) translate(0) scale(0.9);
 }
-.outer:active .front .date {
+.outer:hover .front .date {
   transform: scale(2);
 }
-.outer:active .front .day,
-.outer:active .front .month {
+.outer:hover .front .day,
+.outer:hover .front .month {
   visibility: hidden;
   opacity: 0;
   -webkit-transform: scale(0);
@@ -185,21 +185,21 @@ onMounted(() => {
   -o-transform: scale(0);
   transform: scale(0);
 }
-.outer:active .right {
+.outer:hover .right {
   -webkit-transform: translateX(50px) scale(0.9);
   -moz-transform: translateX(50px) scale(0.9);
   -ms-transform: translateX(50px) scale(0.9);
   -o-transform: translateX(50px) scale(0.9);
   transform: translateX(50px) scale(0.9);
 }
-.outer:active .left {
+.outer:hover .left {
   -webkit-transform: translateX(-50px) scale(0.9);
   -moz-transform: translateX(-50px) scale(0.9);
   -ms-transform: translateX(-50px) scale(0.9);
   -o-transform: translateX(-50px) scale(0.9);
   transform: translateX(-50px) scale(0.9);
 }
-.outer:active .front {
+.outer:hover .front {
   -webkit-transform: translateX(15px) scale(0.9);
   -moz-transform: translateX(15px) scale(0.9);
   -ms-transform: translateX(15px) scale(0.9);
@@ -208,22 +208,22 @@ onMounted(() => {
 }
 /*-----*/
 
-.outer:active .calendarMain {
+.outer:hover .calendarMain {
   transform: scale(1.8);
   opacity: 0;
   visibility: hidden;
 }
-.outer:active .clock {
+.outer:hover .clock {
   transform: scale(1.4);
   opacity: 1;
   visibility: visible;
 }
-.outer:active .calendarNormal {
+.outer:hover .calendarNormal {
   bottom: -30px;
   opacity: 1;
   visibility: visible;
 }
-.outer:active .year {
+.outer:hover .year {
   top: -30px;
   opacity: 1;
   visibility: visible;
