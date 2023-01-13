@@ -426,7 +426,7 @@ onMounted(() => {
   width: 90%;
   .menu-icon,
   .labelName {
-    transition: color 0.2s ease;
+    transition: 0.2s;
   }
   .label .left {
     &.marginAuto {

@@ -9,7 +9,8 @@
       <transition name="fade">
         <div v-show="showSidebar" class="clock">
           <slot name="sidebarClock">
-            <Clock1 />
+            <!--<Clock1 />-->
+            <Clock2 />
           </slot>
         </div>
       </transition>
@@ -41,6 +42,7 @@
 
 <script setup>
 import Clock1 from "@/components/clocks/Clock1.vue";
+import Clock2 from "@/components/clocks/Clock2.vue";
 import SidebarItem from "@/components/SidebarItem.vue";
 import { computed, provide, ref, watch } from "vue";
 

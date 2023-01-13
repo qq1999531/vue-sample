@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="settingContainer">
-        <div class="settingDesc">test1</div>
+        <div class="settingDesc">时钟样式</div>
       </div>
       <div class="settingContainer">
         <div class="settingDesc">test1</div>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import Switch1 from "@/components/Switches/Switch1.vue";
+import Switch1 from "@/components/switches/Switch1.vue";
 import { computed } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
