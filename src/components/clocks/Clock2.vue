@@ -81,8 +81,8 @@ onMounted(() => {
 <style lang="scss">
 /* -- usable codes start -- */
 .anim04c {
-  -webkit-transition: all 0.4s cubic-bezier(0.5, 0.35, 0.15, 1.4);
-  transition: all 0.4s cubic-bezier(0.5, 0.35, 0.15, 1.4);
+  -webkit-transition: all 0.2s cubic-bezier(0.5, 0.35, 0.15, 1.4);
+  transition: all 0.2s cubic-bezier(0.5, 0.35, 0.15, 1.4);
 }
 /*-----*/
 
@@ -243,14 +243,14 @@ onMounted(() => {
 .day {
   font-size: 14px;
   line-height: 30px;
-  font-weight: 600;
+  font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
 .date {
   font-size: 40px;
   line-height: 40px;
-  font-weight: 600;
+  font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -262,7 +262,7 @@ onMounted(() => {
   position: absolute;
   font-size: 20px;
   line-height: 70px;
-  font-weight: 600;
+  font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 3px;
   text-align: center;
@@ -277,7 +277,7 @@ onMounted(() => {
   top: 0;
   font-size: 14px;
   line-height: 40px;
-  font-weight: 600;
+  font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0;
   text-align: center;
@@ -296,7 +296,7 @@ onMounted(() => {
   bottom: 0;
   font-size: 2px;
   line-height: 30px;
-  font-weight: 600;
+  font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 3px;
   text-align: center;

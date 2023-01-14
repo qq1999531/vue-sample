@@ -6,16 +6,20 @@
         <div style="padding-right: 12px">
           <Switch1
             :bindValue="BAndWTheme"
-            :bindValueUpdate="updateTheme"
             :switchText="BAndWText"
             :specialTheme="'BAndWSwitch'"
+            @updateValue="updateTheme"
           />
         </div>
       </div>
       <div class="settingContainer">
         <div class="settingDesc">时钟样式</div>
         <div style="padding-right: 12px">
-          <Select1 />
+          <Select1
+            :bindValue="store.state.clockStyle"
+            :items="clockStyleItems"
+            @updateValue="updateClockStyle"
+          />
         </div>
       </div>
       <div class="settingContainer">
@@ -39,6 +43,7 @@ const BAndWText = {
   onIcon: "clear_day",
   offIcon: "clear_night",
 };
+const clockStyleItems = [{ value: "Clock1" }, { value: "Clock2" }];
 
 const BAndWTheme = computed(() => {
   return store.state.appTheme == "black-theme";
@@ -50,6 +55,9 @@ function updateTheme(BAndWTheme) {
   } else {
     store.dispatch("updateAppTheme", "white-theme");
   }
+}
+function updateClockStyle(newStyle) {
+  store.dispatch("updateClockStyle", newStyle);
 }
 </script>
 

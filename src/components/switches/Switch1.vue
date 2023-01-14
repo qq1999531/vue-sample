@@ -1,9 +1,9 @@
 <template>
   <div class="switchContainer">
-    <input type="checkbox" class="switchInput" />
+    <input type="hidden" class="switchInput" />
     <span
       class="switchMain"
-      @click="props.bindValueUpdate(!bindValue)"
+      @click="emit('updateValue', !props.bindValue)"
       :class="{ checked: props.bindValue, [props.specialTheme]: true }"
     >
       <div
@@ -29,12 +29,9 @@
 <script setup>
 const { computed } = require("@vue/runtime-core");
 
-const props = defineProps([
-  "bindValue",
-  "bindValueUpdate",
-  "switchText",
-  "specialTheme",
-]); //switchText 结构   onText,offText,onIcon,offIcon
+const emit = defineEmits(["updateValue"]);
+const props = defineProps(["bindValue", "switchText", "specialTheme"]); //switchText 结构   onText,offText,onIcon,offIcon
+
 const showText = computed(() => {
   let sText = props.switchText.offText;
   let sIcon = props.switchText.offIcon;
@@ -115,7 +112,6 @@ const showText = computed(() => {
     }
   }
   .switchContent {
-    width: 100%;
     transition: all 0.2s;
     display: flex;
     justify-content: center;

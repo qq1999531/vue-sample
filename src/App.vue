@@ -21,6 +21,11 @@ const appStore = useStore();
 
 const defaultMenu = [
   {
+    name: "Home",
+    href: "/",
+    icon: { text: "home" },
+  },
+  {
     name: "Settings",
     href: "setting",
     icon: { text: "settings" },

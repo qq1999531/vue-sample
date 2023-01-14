@@ -8,10 +8,10 @@
     <div style="height: 100%">
       <transition name="fade">
         <div v-show="showSidebar" class="clock">
-          <slot name="sidebarClock">
-            <!--<Clock1 />-->
-            <Clock2 />
-          </slot>
+          <component
+            :is="currentClock"
+            :key="store.state.clockStyle"
+          ></component>
         </div>
       </transition>
       <div v-show="showSidebar" class="menuHeader"></div>
@@ -45,9 +45,11 @@ import Clock1 from "@/components/clocks/Clock1.vue";
 import Clock2 from "@/components/clocks/Clock2.vue";
 import SidebarItem from "@/components/SidebarItem.vue";
 import { computed, provide, ref, watch } from "vue";
+import { useStore } from "vuex";
 
 const props = defineProps(["sidebarItems"]);
 const emit = defineEmits(["updateshowSidebar"]);
+const store = useStore();
 
 const showSidebar = ref(true);
 const menuHover = ref(false);
@@ -55,6 +57,8 @@ const menuScroll = ref(false);
 const sidebarWidth = ref(200);
 const totalId = ref(0);
 const currentItemHover = ref(null);
+let clockMap = new Map().set("Clock1", Clock1).set("Clock2", Clock2);
+let currentClock = clockMap.get(store.state.clockStyle);
 
 const mouseEnterEvent = computed(() => {
   return !showSidebar.value ? "mouseenter" : null;
@@ -64,6 +68,9 @@ const mouseLeaveEvent = computed(() => {
 });
 const menuScrollEvent = computed(() => {
   return !showSidebar.value ? "scroll" : null;
+});
+const clockStyle = computed(() => {
+  return store.state.clockStyle;
 });
 
 function toggleSidebar() {
@@ -90,11 +97,15 @@ function onMenuScroll() {
 }
 
 watch(showSidebar, (newShowSidebar) => {
+  console.log(currentClock);
   sidebarWidth.value = newShowSidebar ? 200 : 40;
   emit("updateshowSidebar", newShowSidebar);
   if (!newShowSidebar) {
     updateMenuHover(true);
   }
+});
+watch(clockStyle, (newClockStyle) => {
+  currentClock = clockMap.get(newClockStyle);
 });
 
 provide("showSidebar", showSidebar);
@@ -126,25 +137,19 @@ provide("menuScroll", menuScroll);
   height: 140px;
   transition: 0.2s;
 }
-.fade-enter-from {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
   height: 0px;
 }
-.fade-enter-to {
+.fade-enter-to,
+.fade-leave-from {
   opacity: 1;
   height: 140px;
 }
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.2s ease;
-}
-.fade-leave-from {
-  opacity: 1;
-  height: 140px;
-}
-.fade-leave-to {
-  opacity: 0;
-  height: 0px;
 }
 .menuHeader {
   margin-inline-start: auto;
