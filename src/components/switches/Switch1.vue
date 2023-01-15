@@ -75,7 +75,7 @@ const showText = computed(() => {
     display: inline-flex;
     position: relative;
     align-items: center;
-    min-width: 40px;
+    min-width: 60px;
     height: 28px;
     outline: none;
     border-radius: 14px;
@@ -108,6 +108,10 @@ const showText = computed(() => {
       &.BAndWSwitch {
         border: 1px solid #ffffff;
         background: #ffffff;
+        & .switchButton {
+          box-shadow: inset 12px -6px 0px -4px #000000;
+          background-color: #ffffff;
+        }
       }
     }
   }

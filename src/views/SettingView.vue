@@ -40,8 +40,8 @@ const store = useStore();
 const BAndWText = {
   onText: "",
   offText: "",
-  onIcon: "clear_day",
-  offIcon: "clear_night",
+  onIcon: "",
+  offIcon: "",
 };
 const clockStyleItems = [{ value: "Clock1" }, { value: "Clock2" }];
 
