@@ -32,7 +32,7 @@
         <i aria-hidden="true" class="material-symbols-outlined">{{
           props.item.icon.text
         }}</i>
-        <span v-show="labelName" class="labelName">{{ labelName }}</span>
+        <span v-show="showSidebar" class="labelName">{{ labelName }}</span>
       </div>
       <template v-if="(!showSidebar && props.depth != 0) || showSidebar">
         <div
@@ -424,6 +424,7 @@ onMounted(() => {
 .menu-item-base {
   align-self: center;
   width: 90%;
+  transition: 0.2s;
   .menu-icon,
   .labelName {
     transition: 0.2s;
@@ -431,9 +432,11 @@ onMounted(() => {
   .label .left {
     &.marginAuto {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      //top: 50%;
+      //left: 50%;
+      //transform: translate(-50%, -50%);
+      //display: flex;
+      //align-self: center;
     }
   }
   .labelMini .left {
@@ -465,6 +468,7 @@ onMounted(() => {
     }
     > .left {
       display: flex;
+      padding-left: 10px;
     }
     z-index: 851;
     @extend %hoverPointer;
@@ -477,11 +481,15 @@ onMounted(() => {
     box-sizing: border-box;
     height: 40px;
     z-index: 853;
+    flex-flow: column;
+    justify-content: center;
     .left {
       display: flex;
       align-items: center;
+      padding-left: 6px;
       .labelName {
         padding-left: 10px;
+        font-size: 16px;
       }
     }
 
