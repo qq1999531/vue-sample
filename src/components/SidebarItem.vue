@@ -32,7 +32,7 @@
         <i aria-hidden="true" class="material-symbols-outlined">{{
           props.item.icon.text
         }}</i>
-        <span v-show="showSidebar" class="labelName">{{ labelName }}</span>
+        <span v-show="labelName" class="labelName">{{ labelName }}</span>
       </div>
       <template v-if="(!showSidebar && props.depth != 0) || showSidebar">
         <div
