@@ -30,6 +30,11 @@ const defaultMenu = [
     href: "setting",
     icon: { text: "settings" },
   },
+  {
+    name: "Vtuber",
+    href: "vtuber",
+    icon: { text: "youtube_activity" },
+  },
 ];
 
 const appTheme = computed(() => {

@@ -72,20 +72,20 @@ function updateClockStyle(newStyle) {
 }
 .settingsContainer {
   display: flex;
-  width: 80%;
+  width: 96%;
   border-radius: 10px;
   flex-flow: column;
   align-items: center;
   .white-theme & {
-    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 4px 0px #000000;
   }
   .black-theme & {
-    box-shadow: 0px 0px 4px 0px rgb(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 4px 0px #ffffff;
   }
 }
 .settingContainer {
   display: flex;
-  width: 100%;
+  width: 96%;
   padding-block-start: 6px;
   padding-block-end: 6px;
   align-items: center;

@@ -1,0 +1,62 @@
+{
+  "Nijisanji EN": {
+    "channelKey": "UC-JSeFfovhNsEhftt1WHMvg",
+    "avatar_url": "https://yt3.ggpht.com/Kxrb38fp7HMTvGPBnX2D2SqVNwdlgcva7hn12THBbEaR9_mUBKH7y_yWXFfYJ1TMiQWX6iSV=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#A776B9"
+  },
+  "Hololive English": {
+    "channelKey": "UCotXwY6s8pWmuWd_snKYjhg",
+    "avatar_url": "https://yt3.ggpht.com/VhHSeB6EWorOZaDonE1tOLUg4bcqUaPgYxT1BUM4JQTsCRonsnkOlogwvkq5WV0q22woZiR2=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#981700"
+  },
+  "Holostars English": {
+    "channelKey": "UCJxZpzx4wHzEYD-eCiZPikg",
+    "avatar_url": "https://yt3.ggpht.com/jvGFuTmqlv5udorr8TGYsllUntfo0yXRn2hpWrvjWz_nso1-tTQ2J3TPV616F-JLHLKB4s65=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#266aff"
+  },
+  "Nijisanji": {
+    "channelKey": "UCX7YkU9nEeaoZbkVLVajcMg",
+    "avatar_url": "https://yt3.ggpht.com/ytc/AMLnZu8NSNGhu37fUdkLb5TVU3IJrqufsNDfXAJCLUa15g=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#2a4b71"
+  },
+  "Production Kawaii": {
+    "channelKey": "",
+    "avatar_url": "https://yt3.googleusercontent.com/hFAdhE01nosbBAQ5JyX_y3do1MQ_6PU4R_yjM0hKuX7Jxka8SoQInfgoa5qxvp5FIybzdnTxzw=s176-c-k-c0x00ffffff-no-rj",
+    "color": "#000000"
+  },
+  "Holostars": {
+    "channelKey": "UCWsfcksUUpoEvhia0_ut0bA",
+    "avatar_url": "https://yt3.ggpht.com/5Jn_OHkOZhZssXXwWopUQZVwnL16EJivvxTDGqVmp4Cah3nLmVTgZMQmfF-SyuMhtFkncyT9Lw=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#266aff"
+  },
+  "Hololive": {
+    "channelKey": "UCJFZiqLMntJufDCHc6bQixg",
+    "avatar_url": "https://yt3.ggpht.com/ytc/AMLnZu_tIiGHnT-QR6EDHUptchoD0q-ExY8NzVtE7nH6nw=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#266aff"
+  },
+  "ReACT": {
+    "channelKey": "UC90vyzmRgWCE17-uWNsKW2Q",
+    "avatar_url": "https://yt3.ggpht.com/ytc/AMLnZu__yBOktFebV2tG0K0yxGcYunBWwtUk3cItM4pM=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#064862"
+  },
+  "Independent": {
+    "channelKey": "",
+    "avatar_url": "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+    "color": "#000000"
+  },
+  "upd8": {
+    "channelKey": "UCBsrAA8Z_6Ot3my0vM8dlvg",
+    "avatar_url": "https://yt3.ggpht.com/ytc/AL5GRJWgCBoXNlmXR8yLXFu8dQmxRM4nzeTMMhTS6Wp9=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#BA49B9"
+  },
+  "Tsunderia": {
+    "channelKey": "UCsb9OUiLm48wYd7JftL54jw",
+    "avatar_url": "https://yt3.ggpht.com/CmS6oxwYh8k93gfPYerQgKWQMctXbBrkE_94sSnPEFWGMNBiUCEtqe2ZU2RAa3BEosDhobV8=s800-c-k-c0x00ffffff-no-rj",
+    "color": "#EBA2D2"
+  },
+  "Vspo": {
+    "channelKey": "",
+    "avatar_url": "https://yt3.googleusercontent.com/dgFxRY6ACT5Qi3lM1j8YZPe_ZGH_pCRy2N_p5znoAE9mYTYYqUN64RGQvMnMqF4MDr-PKEQJyU8=s176-c-k-c0x00ffffff-no-rj",
+    "color": "#000000"
+  }
+}

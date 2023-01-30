@@ -156,7 +156,7 @@ provide("menuScroll", menuScroll);
   margin-inline-end: auto;
   border-style: inset;
   border-width: 2px;
-  border-radius: 10px;
+  border-radius: 6px;
   width: 80%;
   opacity: 0.5;
   transition: 0.2s;
