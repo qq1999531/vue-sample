@@ -140,7 +140,7 @@ function updateValue(val) {
   overflow-y: hidden;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  transform: translateY(-7px);
+  transform: translateY(-6px);
   list-style: none;
   .white-theme & {
     background-color: #ffffff;
@@ -173,7 +173,7 @@ function updateValue(val) {
   color: #808080;
   transition: 0.2s;
   &:first-child {
-    padding-top: 7px;
+    padding-top: 6px;
   }
   &.itemSelected {
     .white-theme & {
