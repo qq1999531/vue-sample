@@ -3,59 +3,21 @@
   <button @click="test">test</button>
   <div class="vtuberView">
     <div class="livesContainer">
-      <template v-for="(item, index) in liveData" :key="item.videoKey"
-        ><div class="liveContainer" v-if="item.videoKey">
-          <div class="rank">
-            <img
-              :src="
-                channelData[item.channelKey]
-                  ? channelData[item.channelKey].avatar_url
-                  : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-              "
-              class="channelAvatar"
-              alt="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-            />
-            <span>{{ parseInt(index) + 1 }}</span>
-          </div>
-          <div class="channelInfo">
-            <span class="channelName">
-              {{
-                channelData[item.channelKey]
-                  ? channelData[item.channelKey].channelName
-                  : "anonymous"
-              }}
-            </span>
-            <div
-              class="brand"
-              :style="{
-                background: brandcolor(item.channelKey),
-              }"
-            >
-              <img :src="brandAvatar(item.channelKey)" /><span>{{
-                channelData[item.channelKey]
-                  ? channelData[item.channelKey].group
-                  : "anonymous"
-              }}</span>
-            </div>
-          </div>
-          <div class="liveInfo">
-            <div class="liveCover">
-              <img
-                :src="
-                  'https://i.ytimg.com/vi/' +
-                  item.videoKey +
-                  '/hqdefault_live.jpg'
-                "
-              />
-            </div>
-            <div class="rightInfo"></div>
-          </div></div
-      ></template>
+      <VtuberLiveEntry
+        v-for="(item, index) in liveData"
+        :key="item.videoKey"
+        :item="item"
+        :index="index"
+        :channelData="channelData[item.channelKey]"
+        :brandColor="brandColor(item.channelKey)"
+        :brandAvatar="brandAvatar(item.channelKey)"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
+import VtuberLiveEntry from "@/components/entries/VtuberLiveEntry.vue";
 const { ref } = require("@vue/reactivity");
 const { onMounted } = require("@vue/runtime-core");
 const brandData = require("@/data/youtubeChannels/brands.json");
@@ -85,7 +47,7 @@ function brandAvatar(channelKey) {
   }
   return "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png";
 }
-function brandcolor(channelKey) {
+function brandColor(channelKey) {
   if (channelData[channelKey]) {
     if (channelData[channelKey].group == "Independent") {
       return channelData[channelKey].color;
@@ -144,15 +106,29 @@ onMounted(() => {
     }
   }
 }
-.channelAvatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  user-select: none;
-}
 .rank {
   display: flex;
   flex-flow: column;
+  .avatarContainer {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 0, 0, 0.5);
+    .channelAvatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      user-select: none;
+    }
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
   span {
     background: #000000;
     color: #ffffff;
@@ -180,24 +156,111 @@ onMounted(() => {
     margin-top: 10px;
     color: #ffffff;
     padding: 2px;
-    border-radius: 17px;
-    img {
+    border-radius: 16px;
+    .brandAvatarContainer {
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      user-select: none;
-      margin-right: 2px;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      background: rgb(0, 0, 0, 0.5);
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        user-select: none;
+        margin-right: 2px;
+      }
+      svg {
+        width: 10px;
+        height: 10px;
+      }
     }
   }
 }
 .liveInfo {
+  width: calc(70% - 80px);
+  .liveInfoDetail {
+    display: flex;
+  }
+  .rightInfo {
+    display: flex;
+    flex-flow: column;
+    padding-left: 20px;
+    text-align: start;
+    width: calc(100% - 320px);
+    > div {
+      height: 100%;
+    }
+    > div:nth-child(n + 2) {
+      display: flex;
+      span:nth-child(1) {
+        width: 30%;
+      }
+    }
+    span:nth-child(2) {
+      font-weight: bold;
+    }
+    .liveCountGroup {
+      display: flex;
+      flex-flow: column;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      > div:nth-child(1) {
+        text-align: center;
+        font-size: 24px;
+        line-height: 36px;
+      }
+      > div:nth-child(2) {
+        display: flex;
+        div {
+          width: 50%;
+        }
+      }
+    }
+  }
   .liveCover {
+    height: 180px;
+    width: 320px;
+    border-radius: 6px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 0, 0, 0.5);
     img {
       object-fit: cover;
       border-radius: 6px;
-      height: 150px;
+      height: 180px;
       aspect-ratio: 16/9;
     }
+    svg {
+      width: 90px;
+      height: 90px;
+    }
+  }
+  .liveTitle {
+    display: flex;
+    text-align: start;
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: 2em;
+    height: 2em;
+    .loopText {
+      animation: textLoop 10s linear infinite;
+    }
+  }
+}
+@keyframes textLoop {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
   }
 }
 </style>>
