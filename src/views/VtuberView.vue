@@ -2,6 +2,9 @@
   <div>vtuber</div>
   <button @click="test">test</button>
   <div class="vtuberView">
+    <div class="chartContainer">
+      <MultiLevelPie :data="pieChartData" :width="pieChartWidth" />
+    </div>
     <div class="livesContainer">
       <VtuberLiveEntry
         v-for="(item, index) in liveData"
@@ -18,22 +21,45 @@
 
 <script setup>
 import VtuberLiveEntry from "@/components/entries/VtuberLiveEntry.vue";
+import MultiLevelPie from "@/components/charts/Multi-Level_Pie.vue";
 const { ref } = require("@vue/reactivity");
 const { onMounted } = require("@vue/runtime-core");
 const brandData = require("@/data/youtubeChannels/brands.json");
 const channelData = require("@/data/youtubeChannels/channels.json");
+const tempLiveData = require("@/data/youtubeChannels/realtime.json");
 
 const liveData = ref([]);
 import("@/data/youtubeChannels/realtime.json").then((data) => {
   liveData.value = data;
 });
+let pieChartData = {
+  name: "live",
+  children: [
+    {
+      name: "hololive",
+      children: [
+        { name: "hololive", value: 10000 },
+        { name: "fubuki", value: 2000 },
+      ],
+    },
+    {
+      name: "nijisanji",
+      children: [
+        { name: "nijisanji", value: 8000 },
+        { name: "mito", value: 5000 },
+      ],
+    },
+  ],
+};
+console.log(liveData.value);
+multiPieChartData(tempLiveData);
+console.log(pieChartData);
+const pieChartWidth = ref(500);
 
 function test() {
-  for (var i = 0; i < liveData.value.length; i++) {
-    console.log(liveData.value[i]);
-    console.log(channelData[liveData.value[i].channelKey]);
-  }
-  console.log(brandData);
+  multiPieChartData();
+  console.log(pieChartData);
+  console.log(liveData.value);
 }
 function brandAvatar(channelKey) {
   if (channelData[channelKey]) {
@@ -57,6 +83,48 @@ function brandColor(channelKey) {
     }
   }
   return brandData["Independent"].color;
+}
+function multiPieChartData(liveData) {
+  let tempChildren = [];
+  let isExist = false;
+  for (var i = 0; i < liveData.length; i++) {
+    let tempChild = {};
+    let tempBrand = {};
+    tempChild["name"] = channelData[liveData[i].channelKey]
+      ? channelData[liveData[i].channelKey].channelName
+      : "anonymous";
+    tempChild["color"] = channelData[liveData[i].channelKey]
+      ? channelData[liveData[i].channelKey].color
+      : "#000000";
+    tempChild["value"] = liveData[i].liveViewerCount;
+    for (var j = 0; j < tempChildren.length; j++) {
+      if (
+        tempChildren[j]["name"] ==
+        (channelData[liveData[i].channelKey]
+          ? channelData[liveData[i].channelKey].group
+          : "Independent")
+      ) {
+        tempChildren[j]["children"].push(tempChild);
+        isExist = true;
+        break;
+      } else {
+        isExist = false;
+      }
+    }
+    if (!isExist) {
+      tempBrand["name"] = channelData[liveData[i].channelKey]
+        ? channelData[liveData[i].channelKey].group
+        : "Independent";
+      tempBrand["color"] = brandData[channelData[liveData[i].channelKey].group]
+        ? brandData[channelData[liveData[i].channelKey].group].color
+        : brandData["Independent"].color;
+      tempBrand["children"] = [];
+      tempChildren.push(tempBrand);
+      tempChildren[tempChildren.length - 1]["children"].push(tempChild);
+      console.log(tempChild);
+    }
+  }
+  pieChartData.children = tempChildren;
 }
 
 onMounted(() => {
