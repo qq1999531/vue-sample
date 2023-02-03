@@ -26,12 +26,10 @@ const { ref } = require("@vue/reactivity");
 const { onMounted } = require("@vue/runtime-core");
 const brandData = require("@/data/youtubeChannels/brands.json");
 const channelData = require("@/data/youtubeChannels/channels.json");
-const tempLiveData = require("@/data/youtubeChannels/realtime.json");
 
 const liveData = ref([]);
-import("@/data/youtubeChannels/realtime.json").then((data) => {
-  liveData.value = data;
-});
+liveData.value = require("@/data/youtubeChannels/realtime.json");
+console.log(liveData.value);
 let pieChartData = {
   name: "live",
   children: [
@@ -51,10 +49,9 @@ let pieChartData = {
     },
   ],
 };
-console.log(liveData.value);
-multiPieChartData(tempLiveData);
+multiPieChartData(liveData.value);
 console.log(pieChartData);
-const pieChartWidth = ref(500);
+const pieChartWidth = ref(360);
 
 function test() {
   multiPieChartData();
@@ -146,6 +143,7 @@ onMounted(() => {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+.chartContainer,
 .livesContainer {
   display: flex;
   width: 96%;

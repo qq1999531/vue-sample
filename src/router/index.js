@@ -20,6 +20,12 @@ const routes = [
     component: VtuberView,
   },
   {
+    path: "/test",
+    name: "test",
+    component: () =>
+    import(/* webpackChunkName: "about" */ "../views/TestView.vue"),
+  },
+  {
     path: "/about",
     name: "about",
     // route level code-splitting

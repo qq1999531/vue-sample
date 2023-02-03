@@ -1,16 +1,33 @@
 <template>
   <div
     id="multi-level_pie_container"
-    :style="{ width: props.width + 'px', height: props.width + 'px' }"
+    :style="{
+      width: props.width + 'px',
+      height: props.width + 'px',
+    }"
+    class="multiLevelPieContainer"
   ></div>
+  <span
+    v-show="labelVVisible"
+    class="centerLabel"
+    :style="{ top: -props.width / 2 - 20 + 'px' }"
+    >{{ labelName }}<br />liveCount:{{ labelValue }}<br />percent:{{
+      labelPercent
+    }}%</span
+  >
 </template>
 
 <script setup>
-import { onMounted } from "@vue/runtime-core";
+import { onMounted, ref } from "@vue/runtime-core";
 import * as d3 from "d3";
 
 const props = defineProps(["data", "width"]);
+const labelName = ref("");
+const labelVVisible = ref(false);
+const labelValue = ref(0);
+const labelPercent = ref(0);
 let radius = props.width / 6;
+let circleNode = { data: { name: "" }, value: 0 };
 const color = d3.scaleOrdinal(
   d3.quantize(d3.interpolateRainbow, props.data.children.length + 1)
 );
@@ -34,11 +51,14 @@ function partition(data) {
 function renderChart(data, width) {
   const root = partition(data);
   root.each((d) => (d.current = d));
+  circleNode = root;
   const svg = d3
     .select("#multi-level_pie_container")
     .append("svg")
     .attr("viewBox", [0, 0, width, width])
     .style("font", "10px sans-serif");
+  const element = svg.node();
+  element.value = { sequence: [], percentage: 0.0 };
   const g = svg
     .append("g")
     .attr("transform", `translate(${width / 2},${width / 2})`);
@@ -48,26 +68,33 @@ function renderChart(data, width) {
     .data(root.descendants().slice(1))
     .join("path")
     .attr("fill", (d) => {
-      while (d.depth > 1) d = d.parent;
       return d.data.color ? d.data.color : color(d.data.name);
     })
     .attr("fill-opacity", (d) =>
       arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0
     )
     .attr("pointer-events", (d) => (arcVisible(d.current) ? "auto" : "none"))
-    .attr("d", (d) => arc(d.current));
+    .attr("d", (d) => arc(d.current))
+    .on("mouseenter", (event, d) => {
+      // Get the ancestors of the current segment, minus the root
+      const sequence = d.ancestors().reverse().slice(1);
+      // Highlight the ancestors
+      path.attr("fill-opacity", (node) =>
+        sequence.indexOf(node) >= 0 ? 1.0 : 0.4
+      );
+      const percentage = ((100 * d.value) / root.value).toPrecision(3);
+      // Update the value of this view with the currently hovered sequence and percentage
+      element.value = { sequence, percentage };
+      labelName.value = d.data.name;
+      labelVVisible.value = true;
+      labelValue.value = d.value;
+      labelPercent.value = percentage;
+      element.dispatchEvent(new CustomEvent("input"));
+    });
   path
     .filter((d) => d.children)
     .style("cursor", "pointer")
     .on("click", clicked);
-  path.append("title").text(
-    (d) =>
-      `${d
-        .ancestors()
-        .map((d) => d.data.name)
-        .reverse()
-        .join("/")}\n${format(d.value)}`
-  );
   const label = g
     .append("g")
     .attr("pointer-events", "none")
@@ -86,9 +113,17 @@ function renderChart(data, width) {
     .attr("r", radius)
     .attr("fill", "none")
     .attr("pointer-events", "all")
-    .on("click", clicked);
+    .on("click", clicked)
+    .on("mouseenter", (event, d) => {
+      const percentage = ((100 * circleNode.value) / root.value).toPrecision(3);
+      labelName.value = circleNode.data.name;
+      labelVVisible.value = true;
+      labelValue.value = circleNode.value;
+      labelPercent.value = percentage;
+    });
   function clicked(event, p) {
     parent.datum(p.parent || root);
+    circleNode = p ? p : root;
     root.each(
       (d) =>
         (d.target = {
@@ -152,3 +187,10 @@ onMounted(() => {
   renderChart(props.data, props.width);
 });
 </script>
+<style lang="scss">
+.centerLabel {
+  position: relative;
+  height: 0px;
+  font-size: 8px;
+}
+</style>
