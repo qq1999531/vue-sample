@@ -10,5 +10,5 @@ for i in temp:
 # 排序
 sortedSubsSortData = sorted(rawSubsSortData.items(),
                             key=lambda x: x[1], reverse=True)
-with open('./public/data/youtubeChannels/sortBySubs.json', 'w') as channels:
+with open('./src/data/youtubeChannels/sortBySubs.json', 'w') as channels:
     json.dump(sortedSubsSortData, channels, indent=2)

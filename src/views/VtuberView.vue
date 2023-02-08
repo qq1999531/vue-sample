@@ -2,26 +2,34 @@
   <div>vtuber</div>
   <button @click="test">test</button>
   <div class="vtuberView">
-    <div class="chartContainer">
-      <MultiLevelPie :data="pieChartData" :width="pieChartWidth" />
-    </div>
-    <div class="livesContainer">
-      <VtuberLiveEntry
-        v-for="(item, index) in liveData"
-        :key="item.videoKey"
-        :item="item"
-        :index="index"
-        :channelData="channelData[item.channelKey]"
-        :brandColor="brandColor(item.channelKey)"
-        :brandAvatar="brandAvatar(item.channelKey)"
-      />
-    </div>
+    <Tabs
+      :childTabs="[
+        { hash: 'live', header: 'live' },
+        { hash: 'test', header: 'test' },
+      ]"
+      :defaultTabHash="'live'"
+      ><template v-slot:live>
+        <div class="chartContainer">
+          <MultiLevelPie :data="pieChartData" :width="pieChartWidth" />
+        </div>
+        <div class="livesContainer">
+          <VtuberLiveEntry
+            v-for="(item, index) in liveData"
+            :key="item.videoKey"
+            :item="item"
+            :index="index"
+            :channelData="channelData[item.channelKey]"
+            :brandColor="brandColor(item.channelKey)"
+            :brandAvatar="brandAvatar(item.channelKey)"
+          /></div></template
+    ></Tabs>
   </div>
 </template>
 
 <script setup>
 import VtuberLiveEntry from "@/components/entries/VtuberLiveEntry.vue";
 import MultiLevelPie from "@/components/charts/Multi-Level_Pie.vue";
+import Tabs from "@/components/tabs/Tabs.vue";
 const { ref } = require("@vue/reactivity");
 const { onMounted } = require("@vue/runtime-core");
 const brandData = require("@/data/youtubeChannels/brands.json");
@@ -146,16 +154,10 @@ onMounted(() => {
 .chartContainer,
 .livesContainer {
   display: flex;
-  width: 96%;
   border-radius: 10px;
   flex-flow: column;
   align-items: center;
-  .white-theme & {
-    box-shadow: 0px 0px 4px 0px #000000;
-  }
-  .black-theme & {
-    box-shadow: 0px 0px 4px 0px #ffffff;
-  }
+  width: 100%;
 }
 .liveContainer {
   display: flex;

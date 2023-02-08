@@ -1,10 +1,13 @@
 <template>
   <!--<div class="calendarContainer"><FullCalendar /></div>-->
-  <div>
+  <div class="testView">
     <Tabs
-      :childTabs="[{ hash: 'live', header: 'live' }]"
+      :childTabs="[
+        { hash: 'live', header: 'live' },
+        { hash: 'test', header: 'test' },
+      ]"
       :defaultTabHash="'live'"
-    />
+    ></Tabs>
   </div>
 </template>
 
@@ -14,8 +17,9 @@ import Tabs from "@/components/tabs/Tabs.vue";
 </script>
 
 <style lang="scss">
-.calendarContainer {
-  width: 96%;
+.testView {
+  transition: 0.2s;
+  align-items: center;
   display: flex;
   flex-flow: column;
 }
